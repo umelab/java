@@ -65,6 +65,11 @@ public class CSVReader {
      */
     private int tokenCount = 0;
     
+    /**
+     * boolean  true: if file is closed 
+     *          false: if file is opened
+     */
+    private boolean isClosed = false;
 
     public CSVReader(String path) throws IOException {
         this(new FileReader(new File(path)));
@@ -158,6 +163,16 @@ public class CSVReader {
         strip = token.replaceAll(quotation, "");
         return strip;
     }
+
+    /**
+     * figure out if file is closed
+     * @return  true: file close
+     *          false: file open
+     */
+    public boolean isClosed() {
+        return isClosed;
+    }
+
     /**
      * scan all of the file and push queue obj into tokens
      * @throws IOException
@@ -190,11 +205,18 @@ public class CSVReader {
      */
     private void readAll() throws IOException {
         String next;
-        while((next = bufferedReader.readLine()) != null) {
-            if(next.length() > 0) {
-                queue.add(next);
-                lineCount++;
+        try {
+            while((next = bufferedReader.readLine()) != null) {
+                if(next.length() > 0) {
+                    queue.add(next);
+                    lineCount++;
+                }
             }
+        } finally {
+            //reader close
+            bufferedReader.close();
+            isClosed = true;
+            bufferedReader = null;
         }
     }
 
