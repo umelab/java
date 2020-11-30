@@ -32,7 +32,8 @@ import java.io.IOException;
 public class CSVWriter {
 
     private static final String LINEFEED = "\r";
-    private static final String DEF_ENCODE = "utf-8";
+    private static final char DOUBLE_QUOTATION = '\"';
+    private static final String DEF_DECODE = "utf-8";
 
     private OutputStreamWriter osw = null;
 
@@ -44,7 +45,7 @@ public class CSVWriter {
     /**
      * encode
      */
-    private String encode;
+    private String decode;
 
     /**
      * Constructor with default encode as utf-8.
@@ -52,19 +53,19 @@ public class CSVWriter {
      * @throws IOException
      */
     public CSVWriter(String path) throws IOException {
-        this(path, DEF_ENCODE);
+        this(path, DEF_DECODE);
     }
 
     /**
      * Constructor 
      * @param path filepath
-     * @param encode specified encode
+     * @param encode specified decode
      * @throws IOException
      */
-    public CSVWriter(String path, String encode) throws IOException {
-        osw = new OutputStreamWriter(new FileOutputStream(path), encode);
+    public CSVWriter(String path, String decode) throws IOException {
+        osw = new OutputStreamWriter(new FileOutputStream(path), decode);
         lf = LINEFEED;
-        this.encode = encode;
+        this.decode = decode;
     }
 
     /**
@@ -92,20 +93,82 @@ public class CSVWriter {
      * @throws IOException error
      */
     public void writeRow(String rowdata) throws IOException {
-        String convdata = replaceValidStr(rowdata);
-        byte b[] = convdata.getBytes(encode);
-        StringBuffer sb = new StringBuffer();
+        String convData = "";
+        String writeData = "";
+        convData = buildModRowData(rowdata);
+        //create String for specified character code
+        writeData = convertStr(convData);
         try {
-            //append the encoded data
-            sb.append(b);
-            //append the linefeed
-            sb.append(lf);
-            //write to the file obj
-            osw.write(sb.toString());
+            //write data for the file obj
+            osw.write(writeData);
+            osw.write(lf);
         } finally {
             //should it flushes file obj every time?
             osw.flush();
         }
+    }
+
+    /**
+     * decode string with specified character encode
+     * @param data input data
+     * @return converted string
+     * @throws IOException UnsupportEncodeException
+     */
+    private String convertStr(String data) throws IOException {
+        byte[] decodedByte = data.getBytes(decode);
+        return new String(decodedByte, decode);
+    }
+    /**
+     * build modified row data with converting with double quotated operation
+     * ["test",foo,bar] -> ["test",foo,bar]
+     * [test,fo"o,bar] -> [test, "fo""o", bar]
+     * @param data
+     * @return
+     */
+    private String buildModRowData(String data) {
+        String modData = "";
+        String[] tokens = null;
+        tokens = data.split(",");
+        for (int i = 0; i < tokens.length; i++) {
+            //check if token contains double quotation
+            //check position of double quote
+            // ,"foobar", -> no operation
+            // ,"foo"bar",-> ,"foo""bar", 
+            modData += replaceQuote(tokens[i]);
+            if (i != (tokens.length-1)) {
+                modData = modData + ",";
+            }
+        }
+        return modData;
+    }
+
+    /**
+     * replace double quotation
+     * @param data
+     * @return converted string with double quotation
+     */
+    private String replaceQuote(String data) {
+        StringBuffer sb = new StringBuffer();
+        char head, tail;
+        data = data.trim();
+        head = data.charAt(0);
+        tail = data.charAt(data.length() - 1);
+
+        if (head == DOUBLE_QUOTATION && tail == DOUBLE_QUOTATION) {
+            String tmp_str = replaceValidStr(data.substring(1, data.length() -1));
+             sb.append(head);
+             sb.append(tmp_str);
+             sb.append(tail);
+        } else if (containsDoubleQuote(data)){
+            String tmp = replaceValidStr(data);
+            sb.append(DOUBLE_QUOTATION);
+            sb.append(tmp);
+            sb.append(DOUBLE_QUOTATION);
+        } else {
+            sb.append(data);
+        }
+
+        return sb.toString();
     }
 
     /**
@@ -122,6 +185,18 @@ public class CSVWriter {
         } finally {
             osw.close();
         }
+    }
+
+    /**
+     * Returns true if and only if this string contains the double quotation
+     * @param data
+     * @return
+     */
+    private boolean containsDoubleQuote(String data) {
+        boolean containDoubleQuote = false;
+        CharSequence seq = String.valueOf(DOUBLE_QUOTATION);
+        containDoubleQuote = data.contains(seq);
+        return containDoubleQuote;
     }
 
     /**
@@ -144,5 +219,28 @@ public class CSVWriter {
      */
     public void close() throws IOException {
         osw.close();
+    }
+
+    public static void main(String args[]) {
+        String path = "c:\\tools\\write_test.csv";
+        CSVWriter writer = null;
+        String[] data ={
+                        "20201130, 12:34:56, 鈴木, 太郎",
+                        "20201130, 12:34:57, 山\"田, 花子"
+                        };
+        try{
+            writer = new CSVWriter(path, "SJIS");
+            for(int i = 0; i < data.length; i++) {
+                writer.writeRow(data[i]);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
