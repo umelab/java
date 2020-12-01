@@ -1,6 +1,10 @@
 1) CSVReader <br/>
-    csv reader class
+	https://tools.ietf.org/html/rfc4180
+    Csv reader class
 2) CSVWriter <br/>
-	csv writer class
+	https://tools.ietf.org/html/rfc4180
+	Csv writer class
+3) MultiMap <br />
+	Something like HashMap but it is possible to multiple values with a key.
 	
-https://tools.ietf.org/html/rfc4180
+
