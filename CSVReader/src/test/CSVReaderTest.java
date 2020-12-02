@@ -1,4 +1,4 @@
-package test;
+package umelab;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
@@ -123,12 +123,15 @@ public class CSVReaderTest {
      */
     @Test
     public void Check_ReadNext() throws Exception {
-        String path = "c:\\tools\\test.csv";
-        reader = new CSVReader(path);
+        String path = "c:\\tools\\db_source.csv";
+        reader = new CSVReader(path, "SJIS");
         String actual_token;
         int cnt = 0;
-        String expected_token[] = {"date", "time", "firstname", "lastname",
-                                    "20201122", "12:23:45", "eizo", "umeda"};
+        String expected_token[] = {
+                                "20201202", "12:34:56", "京都", "京都市", "右京区", "太秦観測所", "10",
+                                "20201201", "12:34:44", "大阪", "吹田市", "吹田", "市役所前観測所", "13",
+                                "20201130", "02:12:34", "兵庫", "神戸市", "北区", "神戸港観測所", "11"
+                                };
         //while((actual_token = reader.nextToken()) != null) {
         //テスト実施は先頭２行のみ
         for (int i = 0; i < expected_token.length; i++) {
@@ -137,6 +140,22 @@ public class CSVReaderTest {
             assertThat(expected_token[cnt], equalTo(actual_token));
             cnt++;
         }
+    }
+
+    @Test
+    public void Check_NextColumn() throws Exception {
+        String path = "c:\\tools\\db_source.csv";
+        reader = new CSVReader(path, "SJIS");
+        String actual_token;
+        int cnt = 0;
+        int index = 7;
+        String expected_token[] = {"10","13","11"};
+
+        while((actual_token = reader.nextColumn(index)) != null){
+            //System.out.println("token:" + actual_token);
+            assertThat(actual_token, equalTo(expected_token[cnt++]));
+        }
+
     }
 
     /**
@@ -189,6 +208,26 @@ public class CSVReaderTest {
     }
 
     /**
+     * test for csv file with data containing escape str
+     */
+    @Test
+    public void Check_nextToken_With_Delimeter() throws Exception {
+        String path = "c:\\tools\\test_comma.csv";
+        int cnt = 0;
+        reader = new CSVReader(path);
+        String expected_token[] =   {"20,201122", "15:23:45", "taro", "umeda",
+                                    "20201122", "14,23,45", "yoshitaro", "ueda",
+                                    "20201122", "12:23:45", "foo,bar", "yamada"};
+        String actual_token;
+        while((actual_token = reader.nextToken()) != null) {
+            System.out.println("token: " + actual_token);
+            assertThat(expected_token[cnt], equalTo(actual_token));
+            cnt++;
+        }       
+
+    }
+
+    /**
      * test read line count
      * pattern:
      * 1) normal line count
@@ -199,7 +238,7 @@ public class CSVReaderTest {
         String path = "c:\\tools\\test.csv";
         reader = new CSVReader(path);
         int actual_lineCount;
-        int expected_lineCount = 2;
+        int expected_lineCount = 3;
 
         actual_lineCount = reader.getLineCount();
         System.out.println("lineCount: " + actual_lineCount);
@@ -223,4 +262,5 @@ public class CSVReaderTest {
         System.out.println("lineCount: " + actual_lineCount);
         assertThat(expected_lineCount, equalTo(actual_lineCount));
     }
+
 }

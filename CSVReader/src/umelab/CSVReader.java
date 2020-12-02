@@ -3,10 +3,15 @@ package umelab;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayDeque;
 
 /**
+ * @author e.umeda
+ * 
  * CSVReader has simple interface and easy to use for reading a csv file. 
  * The main interface of the class is something like legacy StringTokenizer
  * functions:
@@ -23,8 +28,8 @@ import java.util.ArrayDeque;
 public class CSVReader {
 
     private static final String LF = "\r\n";
-    private static final String SEPARATOR = ",";
-
+    private static final String DEFAULT_SEPARATOR = ",";
+    private static final String DEFAULT_ENCODE = "utf-8";
     /**
      * BufferedReader obj 
      */
@@ -39,6 +44,11 @@ public class CSVReader {
      * save tokens of the file into queue obj
      */
     private ArrayDeque<String> tokenQueue = new ArrayDeque<>();
+
+    /**
+     * encode as String
+     */
+    private String encode;
 
     /**
      * separater as String
@@ -61,6 +71,11 @@ public class CSVReader {
     private int lineCount = 0;
 
     /**
+     * coulumn count
+     */
+    private int columnCount = 0;
+
+    /**
      * token count
      */
     private int tokenCount = 0;
@@ -71,15 +86,35 @@ public class CSVReader {
      */
     private boolean isClosed = false;
 
-    public CSVReader(String path) throws IOException {
-        this(new FileReader(new File(path)));
-        this.separater = SEPARATOR;
-        this.lf = LF;
+    private int columnPos = 1;
+
+    /**
+     * Constructor
+     * @param path file path
+     * @param encode specified encode
+     * @throws IOException
+     */
+    public CSVReader(String path, String encode) throws IOException {
+        this(new InputStreamReader(new FileInputStream(path), encode));
+        this.encode = encode;
     }
 
-    public CSVReader(FileReader reader) throws IOException {
+    /**
+     * Constructor
+     * @param path file path
+     * @throws IOException
+     */
+    public CSVReader(String path) throws IOException {
+        this(new InputStreamReader(new FileInputStream(path)));
+    }
+
+    /**
+     * Constructor
+     */
+    public CSVReader(Reader reader) throws IOException {
         bufferedReader = new BufferedReader(reader);
-        this.separater = SEPARATOR;
+        this.encode = DEFAULT_ENCODE;
+        this.separater = DEFAULT_SEPARATOR;
         this.lf = LF;
         //ready for tokens
         scanAllFile();
@@ -91,6 +126,14 @@ public class CSVReader {
      */
     public void setSeparator(String separater) {
         this.separater = separater;
+    }
+
+    /**
+     * set Encode for specifid encode.
+     * @param encode
+     */
+    public void setEncode(String encode) {
+        this.encode = encode;
     }
 
     /**
@@ -125,7 +168,7 @@ public class CSVReader {
      */
     public boolean isQuotation() {
         boolean isQuote = false;
-        if (quotation != "" || quotation.length() != 0) {
+        if (quotation != null && quotation != "") {
             isQuote = true;
         }
         return isQuote;
@@ -145,6 +188,39 @@ public class CSVReader {
             if (isQuotation()) {
                 next = stripQuotation(next);
             }
+        }
+        return next;
+    }
+
+    /**
+     * return tokens with specified column from queue buffer
+     * @param token
+     * @return
+     */
+    public String nextColumn(int index) throws IOException {
+        String next = "";
+
+        while (true) {
+            int mod = columnPos % index;
+            columnPos++;
+            //do refactoring laster
+            if (mod != 0 || columnPos == 0) {
+                tokenQueue.poll();
+            } else {
+                next = tokenQueue.poll();
+                break;
+            }
+        }
+
+        if (next != null) {
+            next = next.trim();
+            if (isQuotation()) {
+                next = stripQuotation(next);
+            }
+        }
+
+        if (tokenCount < (columnPos - 1)) {
+            next = null;
         }
         return next;
     }
@@ -185,8 +261,10 @@ public class CSVReader {
 
         while((line = queue.poll())!= null) {
             tmp_token = line.split(separater, -1);
+            columnCount = tmp_token.length;
             for (int i = 0; i < tmp_token.length; i++) {
                 pushToken(tmp_token[i]);
+                tokenCount++;
             }
         }
     }
