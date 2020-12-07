@@ -6,5 +6,9 @@
 	Csv writer class
 3) MultiMap <br />
 	Something like HashMap but it is possible to multiple values with a key.
-	
+4) TSVWriter <br />
+	Tsv(Tabbed Seperated Value) writer class
+5) CfgReader <br />
+	cfg, ini file format reader class
+
 
