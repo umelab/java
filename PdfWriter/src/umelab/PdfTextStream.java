@@ -1,5 +1,7 @@
 package umelab;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayDeque;
 
 /**
@@ -17,7 +19,12 @@ import java.util.ArrayDeque;
  * 
  */
 public class PdfTextStream {
-    
+
+    /**
+     * Encode for multibyte string
+     */
+    private static final String UTF8 = "UTF-8";
+
     /**
      * LF Operator
      */
@@ -32,6 +39,16 @@ public class PdfTextStream {
      * Close brackets
      */
     private static final String CL_BRACKET = ")";
+
+    /**
+     * Open Angle brackets for cmap text
+     */
+    private static final String OP_ANGLE_BRACKET = "<";
+
+    /**
+     * Close Angle bracket for cmap text
+     */
+    private static final String CL_ANGLE_BRACKET = ">";
 
     /**
      * BT Operator
@@ -71,19 +88,33 @@ public class PdfTextStream {
     private int xStartPos;
     private int yStartPos;
 
+    /**
+     * Constructor
+     */
     public PdfTextStream() {
         this(null, null);
     }
 
+    /**
+     * Constructor
+     * @param doc
+     * @param page
+     */
     public PdfTextStream(PdfDocument doc, PdfPage page) {
         this.pdfDoc = doc;
         this.pdfPage = page;
     }
 
+    /**
+     * start text marker
+     */
     public void beginText() {
         queue.add(BT);
     }
 
+    /**
+     * end text marker
+     */
     public void endText() {
         queue.add(ET);
     }
@@ -96,6 +127,36 @@ public class PdfTextStream {
         String pdfText;
         pdfText = OP_BRACKET + text + CL_BRACKET + " " +TJ;
         queue.add(pdfText);
+    }
+
+    /**
+     * set Japanese Text. For now, it is only UTF encoding, not ShiftJIS right now.
+     * @param text
+     * @throws IOException UnsupportedEncodingException
+     */
+    public void setJText(String text) throws IOException {
+        String pdfText;
+        String convText = convertStr(text, UTF8);
+        pdfText = OP_ANGLE_BRACKET + convText + CL_ANGLE_BRACKET + " " + TJ;
+        queue.add(pdfText); 
+    }
+
+    /**
+     * Hex values with specified encode for the text
+     * @param text specified text for convertion
+     * @param encode specified encode
+     * @throws UnsupportedEncodingException unsupported encoding exception
+     * @return converted text
+     */
+    private String convertStr(String text, String encode) throws UnsupportedEncodingException {
+        String convStr = "";
+        byte[] byteUtf = text.getBytes(encode);
+        
+        String strUtf = new String(byteUtf, encode);
+        for(char c: strUtf.toCharArray()) {
+            convStr += Integer.toHexString(c);
+        }
+        return convStr;
     }
 
     /**
