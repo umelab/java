@@ -9,6 +9,7 @@ import static org.mockito.Mockito.mock;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayDeque;
+import java.util.Locale;
 
 import org.junit.Assert;
 import org.junit.After;
@@ -254,18 +255,79 @@ public class PdfTextStreamTest {
     }
 
     @Test
-    public void Test_Jap() throws Exception {
+    public void Test_Jap_UTF() throws Exception {
         String hex ="";
-        String test = "あいう";
+        String test = "アメンボは赤いよ楽しいな";//"I Live in N.Y.";//"aア!";//メンボ赤いよ楽しいな"; //"abcdef";
         byte[] byteUtf = test.getBytes("UTF-8");
         
         String strUtf = new String(byteUtf, "UTF-8");
         for(char c: strUtf.toCharArray()) {
-            hex += Integer.toHexString(c);
+            if (isAsciiChar(c)) {
+                hex += convAsciiChar(c);
+            } else {
+                hex += Integer.toHexString(c);
+            }
         }
         System.out.println("hex: " + hex);
+
+        for (byte b : byteUtf) {
+            //System.out.printf("%02x ", b);
+            System.out.printf("%04x", b);
+        }
+
+        System.out.println("");
+        char ch;
+        for (int i = 0; i < test.length(); i++) {
+            ch = test.charAt(i);
+            checkAscii(ch);
+            //System.out.print(ch);
+        }
 //        for (int i = 0; i < b.length; i++) {
 //            System.out.print(b[i]);
 //        }
+    }
+
+    private boolean isAsciiChar(int cha) {
+        if (cha >= 0x20 && cha <= 0x7e) {
+            return true;
+        }
+        return false;
+    }
+
+    private String convAsciiChar(int cha) {
+        String zeropadAscii;
+        String hex = String.format(Locale.ENGLISH, "%04X", cha);
+        System.out.println("hex1: " + hex);
+        return hex;
+    }
+
+    private void checkAscii(int cha) {
+        int startIndex = 0x21;  //!
+        int endIndex = 0x7E;    //~
+        if (cha >= startIndex && cha <= endIndex) {
+            System.out.printf("ascii %02x", cha);
+        }
+    }
+
+    @Test
+    public void Test_Jap_SJIS() throws Exception {
+        String hex ="";
+        //String test = "I Live in N.Y."; //"アメンボ";
+        String test = "アメンボは赤いよ楽しいな!12345";
+        byte[] byteUtf = test.getBytes("SJIS");
+        
+        String strUtf = new String(byteUtf, "SJIS");
+        for(char c: strUtf.toCharArray()) {
+            hex += Integer.toHexString(c);
+        }
+        System.out.println("hex: " + hex);
+        StringBuilder builder = new StringBuilder();
+ 
+        for (byte b : byteUtf) {
+            String tmp = String.format(Locale.ENGLISH, "%02x", Byte.valueOf(b));
+            builder.append(tmp);
+        }
+
+        System.out.println("result: " + builder.toString());
     }
 }

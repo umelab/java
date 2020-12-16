@@ -1,0 +1,143 @@
+%PDF-1.4
+%î”‹üß
+1 0 obj
+<<
+/Type /Catalog
+/Version /1.4
+/Pages 2 0 R
+>>
+endobj
+2 0 obj
+<<
+/Type /Pages
+/Kids [3 0 R 4 0 R]
+/Count 2
+>>
+endobj
+3 0 obj
+<<
+/Type /Page
+/MediaBox [0.0 0.0 612.0 792.0]
+/Resources 5 0 R
+/Contents 6 0 R
+/Parent 2 0 R
+>>
+endobj
+4 0 obj
+<<
+/Type /Page
+/MediaBox [0.0 0.0 612.0 792.0]
+/Resources 5 0 R
+/Contents 7 0 R
+/Parent 2 0 R
+>>
+endobj
+5 0 obj
+<<
+/Font
+<<
+/F0
+	<<
+	/Type /Font
+	/BaseFont /Arial
+	/Subtype /Type1
+	>>
+/F1
+	<<
+	/Type /Font
+	/BaseFont /KozMinPro6N-Regular
+	/Subtype /Type0
+	/Encoding /UniJIS-UTF16-H
+	/DescendantFonts [8 0 R]
+	>>
+>>
+>>
+endobj
+6 0 obj
+<<
+>>
+stream
+1. 0. 0. 1. 50. 790. cm		
+% 3.3 common transformations 
+% p.118
+% [1 0 0 1 dx dy] translation
+% [sx 0 0 sy 0 0] scaling
+% [cosq sinq -sinq cosq 0 0] rotation
+% 
+BT
+/F1 26. Tf
+0 -20 Td
+<30a230e130f330dc8d6430443088697d30573044306a> Tj
+/F1 20. Tf
+0 -26 Td
+<672C30920031518A8AAD307F307E3057305F0021> Tj
+/F1 16. Tf
+0 -26 Td
+<3053308c306f30c630b930c8>  Tj
+/F1 14. Tf
+0 -26 Td
+<00490020004C00690076006500200069006E0020004E002E0059002E>  Tj
+/F0 25. Tf
+0 -26 Td
+%(I Live in N.Y.) Tj
+<0049204C697665> Tj
+/F0 25. Tf
+0 -26 Td
+(I Live in N.Y.) Tj
+/F1 12. Tf
+0 -26 Td
+%<424344> Tj
+<006100620063006400650066> Tj
+%(Barrararara barararaara) Tj
+/F0 20. Tf
+0 -150 Td
+<616263> Tj
+ET
+endstream
+endobj
+7 0 obj
+<<
+>>
+stream
+1. 0. 0. 1. 50. 700. cm
+BT
+/F0 36. Tf
+(Hello, World2!) Tj
+ET
+endstream
+endobj
+8 0 obj
+<<
+  /Type /Font
+  /Subtype /CIDFontType0
+  /BaseFont /KozMinPr6N-Medium %GothicBBB-Medium    %Ryumin-Light    %KozMinPr6N-Medium
+  /CIDSystemInfo <<
+    /Registry (Adobe)
+    /Ordering (Japan1)
+    /Supplement 6
+  >>
+  /FontDescriptor 9 0 R
+>>
+endobj
+9 0 obj
+<<
+  /Type /FontDescriptor
+  /FontName /KozMinPr6N-Medium %GothicBBB-Medium     %Ryumin-Light    %KozMinPr6N-Medium
+  /Flags 4
+  /FontBBox [-437 -340 1147 1317]
+  /ItalicAngle 0
+  /Ascent 1317
+  /Descent -349
+  /CapHeight 742
+  /StemV 80
+>>
+endobj
+trailer
+<<
+/Root 1 0 R
+/ID [<511F6792AE5323A2BE987CFC2406338B> <511F6792AE5323A2BE987CFC2406338B>]
+/Size 5
+>>
+startxref
+299
+%%EOF

@@ -3,6 +3,7 @@ package umelab;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayDeque;
+import java.util.Locale;
 
 /**
  * @author e.umeda
@@ -24,6 +25,11 @@ public class PdfTextStream {
      * Encode for multibyte string
      */
     private static final String UTF8 = "UTF-8";
+
+    /**
+     * Encode for ShiftJIS string
+     */
+    private static final String SJIS = "SJIS";
 
     /**
      * LF Operator
@@ -150,14 +156,20 @@ public class PdfTextStream {
      */
     private String convertStr(String text, String encode) throws UnsupportedEncodingException {
         String convStr = "";
-        byte[] byteUtf = text.getBytes(encode);
         
-        String strUtf = new String(byteUtf, encode);
-        for(char c: strUtf.toCharArray()) {
-            convStr += Integer.toHexString(c);
+        if (encode.equals(UTF8)) {
+            //convert for unicode
+            convStr = StringUtil.convUTFStr(text);
+        } else if (encode.equals(SJIS)) {
+            //convert for sjis
+            convStr = StringUtil.convSJISStr(text);
+        } else {
+            throw new UnsupportedEncodingException("Please specify UTF-8 or SJIS");
         }
         return convStr;
     }
+
+ 
 
     /**
      * set text position with x and y coordinate
