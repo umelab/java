@@ -140,9 +140,9 @@ public class PdfTextStream {
      * @param text
      * @throws IOException UnsupportedEncodingException
      */
-    public void setJText(String text) throws IOException {
+    public void setJText(String text, String encode) throws IOException {
         String pdfText;
-        String convText = convertStr(text, UTF8);
+        String convText = convertStr(text, encode);
         pdfText = OP_ANGLE_BRACKET + convText + CL_ANGLE_BRACKET + " " + TJ;
         queue.add(pdfText); 
     }

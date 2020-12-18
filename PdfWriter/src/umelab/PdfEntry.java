@@ -14,6 +14,13 @@ public class PdfEntry {
         this.value = value;
     }
 
+    public PdfEntry(String key) {
+        this(key, null);
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
     
     public String getKey() {
         String keyvalue = "";

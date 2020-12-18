@@ -1,6 +1,8 @@
 package umelab;
 
-public class PdfPage {
+import java.util.ArrayList;
+
+public class PdfPage extends PdfObject {
  
     private PdfFont pdfFont;
 
@@ -27,5 +29,15 @@ public class PdfPage {
 
     public int getWidth(){
         return this.width;
+    }
+
+    protected ArrayList<PdfObject> parseObj(ArrayList<PdfObject> list) {
+        list.add(this);
+
+        return list;
+    }
+
+    public String toString() {
+        return "PdfPage";
     }
 }
