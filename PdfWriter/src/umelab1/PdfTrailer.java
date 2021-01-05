@@ -1,77 +1,57 @@
 package umelab;
 
-/**
- * @author e.umeda
- * @date 2020/12/11
- * 
- * an example description is following:
- * trailer          <---tailer label
- * <<
- * /Root 1 0 R      <---dictionary part
- * /Size 5
- * >>
- * startxref        <---start cross ref offset
- * 305              <---offset value
- * %%EOF            <---end label
- * 
- */
-public class PdfTrailer {
+public class PdfTrailer extends PdfObject{
 
-    private static final String TRAIL_LABEL = "trailer";
-    private static final String XREF_LABEL  = "startxref";
-    private static final String LF = " \n";
-    private static final String EOF = "%%EOF";
+    private int startXrefOffset;
 
-    private int xrefPos = 0;
-    private PdfDictionary trailDict = null;
-    
-    /**
-     * コンストラクタ
-     */
     public PdfTrailer() {
-        this(null, 0);
+        this(null);
+    }
+
+    public PdfTrailer(String name) {
+        super(name);
     }
 
     /**
-     * コンストラクタ
-     * @param trailDict
-     * @param xrefPos
+     * /Rootの関節参照文字列を設定する
+     * @param obj
      */
-    public PdfTrailer(PdfDictionary trailDict, int xrefPos) {
-        this.trailDict = trailDict;
-        this.xrefPos = xrefPos;
+    public void setRoot(String refStr) {
+        entry.put(PdfConstant.PDF_ROOT, refStr);
     }
 
     /**
-     * Trailerオブジェクト設定する
-     * @param Trailerに設定する辞書オブジェクト
-     * @param Trailerに設定する相互参照リンクオフセット
+     * /Sizeで参照オブジェクト数を設定する
+     * @param objCount
      */
-    public void setTrailerProp(PdfDictionary trailDict, int xrefPos) {
-        this.trailDict = trailDict;
-        this.xrefPos = xrefPos;
+    public void setCount(int objCount) {
+        entry.put(PdfConstant.PDF_SIZE, String.valueOf(objCount));
     }
 
-    /**
-     * Trailerオブジェクトに登録されている情報を出力する
-     */
-    public String doOutput() {
-        String output = "";
-        output = TRAIL_LABEL + LF;
-        output+= trailDict.doOutput();
-        output+= XREF_LABEL + LF;
-        output+= String.valueOf(xrefPos) + LF;
-        output+= EOF;
-        return output;
+    public String dumpInfo() {
+        String str = "";
+        str += PdfConstant.PDF_TRAILER + " \n";
+        str += "<< \n";
+        for (String key : entry.keySet()) {
+            str += key + " " + entry.get(key) + " \n";
+        }
+        str += ">> \n";
+        str += PdfConstant.PDF_STARTXREF + " \n";
+        str += String.valueOf(getXRefOffset()) + " \n";
+        str += PdfConstant.PDF_EOF + " \n";        
+
+        return str;
     }
 
-    public int getXRefPos() {
-        return this.xrefPos;
+    public void setXRefOffset(int startXrefOffset) {
+        this.startXrefOffset = startXrefOffset;
     }
 
-    public PdfDictionary getDictionary() {
-        return this.trailDict;
+    private int getXRefOffset() {
+        return startXrefOffset;
     }
 
-
+    public int getObjSize() {
+        return 0;
+    }
 }
