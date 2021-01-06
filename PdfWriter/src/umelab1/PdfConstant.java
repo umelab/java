@@ -28,6 +28,16 @@ public class PdfConstant {
     public static final String PDF_CL_RECT_BRACKET  = "]";
 
     /**
+     * テキスト開始マーク
+     */
+    public static final String PDF_OP_CIR_BRACKET = "(";
+
+    /**
+     * テキスト終了マーク
+     */
+    public static final String PDF_CL_CIR_BRACKET = ")";
+    
+    /**
      * Indirectオブジェクト開始マーク
      */
     public static final String PDF_START_OBJ        = "obj";

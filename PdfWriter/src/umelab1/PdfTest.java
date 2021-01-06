@@ -21,6 +21,11 @@ public class PdfTest
         page1.addFont(font1);
         page1.addFont(font2);
         
+        PdfTextStream stream = new PdfTextStream(doc, page1);
+        stream.beginText();
+        stream.setFont(font1, 14);
+        stream.endText();
+
         doc.printInfo();
 //        PdfFont font2 = new PdfFont();
 //        PdfTextStream stream = new PdfTextStream(doc, page1);

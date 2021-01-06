@@ -60,29 +60,29 @@ public class PdfResource extends PdfObject {
     public PdfResource(String name) {
         super(name);
         setRefID(ai.getAndIncrement());
-        entry.put(PdfConstant.PDF_PROCSET, PdfConstant.PDF_PROCSET_DEFAULT);
-        entry.put(PdfConstant.PDF_FONT, null);
+//        entry.put(PdfConstant.PDF_PROCSET, PdfConstant.PDF_PROCSET_DEFAULT);
+//        entry.put(PdfConstant.PDF_FONT, null);
     }
 
     /**
-     * 参照番号を設定する
-     * @param no    設定する参照番号
+     * setup refid
+     * @param no    specified refid
      */
     private void setRefID(int no) {
         this.refno = no;
     }
 
     /**
-     * 参照番号を取得する
-     * @return  取得する参照番号
+     * get refid
+     * @return  specified refid
      */
     public int getRefID() {
         return refno;
     }
 
     /**
-     * 参照番号ラベルを取得する
-     * @return  取得する参照番号ラベル
+     * get refid label
+     * @return  specified refid label
      */
     public String getRefStr() {
         String refInfo;
@@ -90,12 +90,16 @@ public class PdfResource extends PdfObject {
         return refInfo;
     }
 
+    /**
+     * add font obj
+     * @param font
+     */
     public void addFont(PdfFont font) {
         fontList.add(font);
     }
 
     public String dumpInfo() {
-        String str = String.valueOf(getRefID()) + " 0 obj " + PdfConstant.PDF_LF;
+        String str = String.valueOf(getRefID()) + " 0 obj" + PdfConstant.PDF_LF;
         str += PdfConstant.PDF_OP_BRACKET + PdfConstant.PDF_LF;
         str += PdfConstant.PDF_PROCSET + " " + PdfConstant.PDF_PROCSET_DEFAULT + PdfConstant.PDF_LF;
         if (fontList.size() > 0) {

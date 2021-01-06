@@ -22,7 +22,7 @@ public class PdfResourceTest {
 
     // instance for test
     @InjectMocks
-    PdfDocument doc = null;
+    PdfResource resrc = null;
 
     /**
     * @throws java.lang.Exception
@@ -126,6 +126,37 @@ public class PdfResourceTest {
             actual_font = (PdfFont) list.get(i);
             assertThat(actual_font, equalTo(expected_font[i]));
         }
+    }
+
+    /**
+     * Test output procset
+     */
+    @Test
+    public void Test_Ouput_Procset() throws Exception {
+        String actual_value = "";
+        String expected_value = "1 0 obj \n<< \n/ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] \n>> \n";
+
+        PdfResource resrc = new PdfResource();
+        actual_value = resrc.dumpInfo();
+ 
+        assertThat(actual_value, equalTo(expected_value));
+    }
+
+    /**
+     * Test output procset and font
+     */
+    @Test
+    public void Test_Output_Font() throws Exception {
+        String actual_value = "";
+        String expected_value = "1 0 obj \n<< \n/ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] \n";
+        expected_value += "/Font \n<< \n/F2 \n<< \n/Type /Font \n/BaseFont /Helvetica \n/SubType /Type1 \n";
+        expected_value += ">> \n>> \n>> \n";
+
+        PdfResource resrc = new PdfResource();
+        resrc.addFont(new PdfFont(PdfFont.HELVETICA, false, false));
+        actual_value = resrc.dumpInfo();
+ 
+        assertThat(actual_value, equalTo(expected_value));
     }
 
 }

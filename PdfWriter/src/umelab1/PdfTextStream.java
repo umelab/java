@@ -1,12 +1,25 @@
 package umelab;
 
+import java.util.ArrayDeque;
+
 public class PdfTextStream extends PdfObject {
-    
+    private static final String BT = "BT" + PdfConstant.PDF_LF;
+    private static final String ET = "ET" + PdfConstant.PDF_LF;
+    private static final String TF = "Tf" + PdfConstant.PDF_LF;
+    private static final String Td = "Td" + PdfConstant.PDF_LF;
+    private static final String TD = "TD" + PdfConstant.PDF_LF;
+    private static final String Tj = "Tj" + PdfConstant.PDF_LF;
+
     private int refno;
 
     private PdfDocument pdfDoc;
     private PdfPage pdfPage;
 
+    /**
+     * ArrayDeque for text stream
+     */
+    private ArrayDeque<String> que = new ArrayDeque<>();
+    
     public PdfTextStream(PdfDocument doc, PdfPage page) {
         pdfDoc = doc;
         pdfPage = page;
@@ -14,6 +27,8 @@ public class PdfTextStream extends PdfObject {
         //PdfDocumentにPdfResourceを登録する
         //printInfoがコールされた時にdumpInfoがコールされる
         doc.add(this);
+
+        setRefID(ai.getAndIncrement());
     }
 
     public void setFont(PdfFont font) {
@@ -46,8 +61,44 @@ public class PdfTextStream extends PdfObject {
         return refInfo;
     }
 
+    public void beginText() {
+        que.add(BT);
+    }
+
+    /**
+     * set specified font obj and its size with textstream.
+     * @param font  specifed font instance
+     * @param fonsize specified font size
+     */
+    public void setFont(PdfFont font, int fontsize) {
+        String tfLine = font.getIndirectFont() + " " + String.valueOf(fontsize) + " " + TF;
+        que.add(tfLine);
+    }
+
+    public void setOffSet(int dx, int dy) {
+        String tdLine = String.valueOf(dx) + " " + String.valueOf(dy) + " " + Td;
+        que.add(tdLine);
+    }
+
+    public void setText(String text) {
+        String txtLine = PdfConstant.PDF_OP_CIR_BRACKET + text + PdfConstant.PDF_CL_CIR_BRACKET + " " + Tj;
+        que.add(txtLine);
+    }
+
+    public void endText() {
+        que.add(ET);
+    }
+
     public String dumpInfo() {
-        return "";
+        String streamInfo = String.valueOf(getRefID()) + " 0 obj " + PdfConstant.PDF_LF;
+        streamInfo += "<< >>" + PdfConstant.PDF_LF;
+        streamInfo += "stream" + PdfConstant.PDF_LF;
+        for (String info : que) {
+            streamInfo += info;
+        } 
+        streamInfo += "endstream" + PdfConstant.PDF_LF;
+        streamInfo += "endobj" + PdfConstant.PDF_LF;
+        return streamInfo;
     }
 
     public int getObjSize() {

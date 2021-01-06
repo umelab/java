@@ -1,5 +1,7 @@
 package umelab;
 
+import java.util.HashMap;
+
 public class PdfFont extends PdfObject {
 
     public static final int TIMES_ROMAN = 0;
@@ -71,6 +73,16 @@ public class PdfFont extends PdfObject {
         return refno;
     }
 
+    /**
+     * get refid label
+     * @return  specified refid label
+     */
+    public String getRefStr() {
+        String refInfo;
+        refInfo = String.valueOf(refno) + " 0 R";
+        return refInfo;
+    }
+
     public String getIndirectFont() {
         return "/F" + String.valueOf(getRefID());
     }
@@ -90,6 +102,14 @@ public class PdfFont extends PdfObject {
         return fontInfo;
     }
 
+    /**
+     * This method is for an unit-test
+     * @return
+     */
+    protected HashMap<String, String> getEntry() {
+        return entry;
+    }
+    
     public int getObjSize() {
         return objLength;
     }
