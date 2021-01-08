@@ -16,6 +16,12 @@ public class PdfTextStream extends PdfObject {
     private PdfPage pdfPage;
 
     /**
+     * data size of this obj.
+     */
+    private int objLength;
+
+
+    /**
      * ArrayDeque for text stream
      */
     private ArrayDeque<String> que = new ArrayDeque<>();
@@ -75,7 +81,7 @@ public class PdfTextStream extends PdfObject {
         que.add(tfLine);
     }
 
-    public void setOffSet(int dx, int dy) {
+    public void setTextPosition(int dx, int dy) {
         String tdLine = String.valueOf(dx) + " " + String.valueOf(dy) + " " + Td;
         que.add(tdLine);
     }
@@ -89,6 +95,22 @@ public class PdfTextStream extends PdfObject {
         que.add(ET);
     }
 
+    /**
+     * This method is for an unit-test.
+     * @return
+     */
+    protected int getQueueSize() {
+        return que.size();
+    }
+
+    /**
+     * This method is for an unit-test.
+     * @return
+     */
+    protected ArrayDeque<String> getQueue() {
+        return que;
+    }
+
     public String dumpInfo() {
         String streamInfo = String.valueOf(getRefID()) + " 0 obj " + PdfConstant.PDF_LF;
         streamInfo += "<< >>" + PdfConstant.PDF_LF;
@@ -98,11 +120,13 @@ public class PdfTextStream extends PdfObject {
         } 
         streamInfo += "endstream" + PdfConstant.PDF_LF;
         streamInfo += "endobj" + PdfConstant.PDF_LF;
+
+        objLength = streamInfo.length();
         return streamInfo;
     }
 
     public int getObjSize() {
-        return 0;
+        return objLength;
     }
 
 }

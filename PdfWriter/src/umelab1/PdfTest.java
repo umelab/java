@@ -10,20 +10,22 @@ public class PdfTest
     {
         PdfDocument doc = new PdfDocument();
         PdfPage page1 = new PdfPage();
-        PdfPage page2 = new PdfPage();
+ //       PdfPage page2 = new PdfPage();
         doc.addPage(page1);
-        doc.addPage(page2);             //ArrayList size -> 2
+ //       doc.addPage(page2);             //ArrayList size -> 2
 
 
         PdfFont font1 = new PdfFont(PdfFont.TIMES_ROMAN, false, false);
-        PdfFont font2 = new PdfFont(PdfFont.COURIER, false, false);
+ //       PdfFont font2 = new PdfFont(PdfFont.COURIER, false, false);
 
         page1.addFont(font1);
-        page1.addFont(font2);
+ //       page1.addFont(font2);
         
         PdfTextStream stream = new PdfTextStream(doc, page1);
         stream.beginText();
         stream.setFont(font1, 14);
+        stream.setTextPosition(123, 456);
+        stream.setText("This is a Test");
         stream.endText();
 
         doc.printInfo();

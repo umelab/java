@@ -111,7 +111,7 @@ public class PdfResource extends PdfObject {
             str += PdfConstant.PDF_CL_BRACKET + PdfConstant.PDF_LF;
         } 
         str += PdfConstant.PDF_CL_BRACKET + PdfConstant.PDF_LF;
-
+        str += "endobj" + PdfConstant.PDF_LF;
         objLength = str.length();
         /**
          * /F0 

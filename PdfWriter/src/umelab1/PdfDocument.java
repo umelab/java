@@ -39,7 +39,8 @@ public class PdfDocument extends PdfObject {
     private void init() {
         add(this);
         setRefID(ai.getAndIncrement());
-
+        //必要
+        entry("/Pages", Pages.getRefStr());
         pages = new PdfPages();
         add(pages);
     }
@@ -100,21 +101,23 @@ public class PdfDocument extends PdfObject {
         int incOffset = 0;
         while(iterator.hasNext()) {
             PdfObject o = iterator.next();
-            dumpInfo = o.dumpInfo();
+            dumpInfo += o.dumpInfo();
             incOffset += o.getObjSize();
             xrefList.add(incOffset);
-            System.out.println(dumpInfo);
         }
+        System.out.print(dumpInfo);
         createXRef();
         createPdfTrailer(incOffset);
-        System.out.println("");
+        //System.out.println("");
     }
 
     /**
      * PdfDocumentの情報を出力する
      */
     public String dumpInfo() {
-        String str = String.valueOf(getRefID()) + " 0 obj " + PdfConstant.PDF_LF;
+        String str = "%PDF-1.4" + PdfConstant.PDF_LF;
+        str += "%\\0xf2\\0xf3\\0xcf\\0xf3" + PdfConstant.PDF_LF;
+        str += String.valueOf(getRefID()) + " 0 obj " + PdfConstant.PDF_LF;
         str += PdfConstant.PDF_OP_BRACKET + PdfConstant.PDF_LF;
         for (String key : entry.keySet()) {
             str += key + " " + entry.get(key) + PdfConstant.PDF_LF;
