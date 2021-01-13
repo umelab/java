@@ -357,7 +357,7 @@ public class PdfFontTest {
 
         PdfFont font = new PdfFont(PdfFont.HELVETICA, true, false);
 
-        actual_value = font.dumpInfo();
+        actual_value = new String(font.dumpInfo());
 
         assertThat(actual_value, equalTo(expected_value));
 

@@ -11,6 +11,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.HashMap;
 
 import org.junit.Assert;
 import org.junit.After;
@@ -47,5 +48,21 @@ public class PdfDocumentTest {
         PdfDocument doc = new PdfDocument();
 
         assertThat(doc, is(instanceOf(PdfDocument.class)));
+    }
+
+    /**
+     * Test entry tag which is:
+     * /Type and /Pages
+     * @throws Exception
+     */
+    @Test
+    public void Test_Entry() throws Exception {
+        String[] expected_value = {"/Type", "/Pages"};
+
+        PdfDocument doc = new PdfDocument();
+        //execute test
+        HashMap<String, String> entry = doc.getEntry();
+        //confirm
+        assertThat(entry.keySet(), hasItems(expected_value));
     }
 }

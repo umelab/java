@@ -60,8 +60,8 @@ public class PdfResource extends PdfObject {
     public PdfResource(String name) {
         super(name);
         setRefID(ai.getAndIncrement());
-//        entry.put(PdfConstant.PDF_PROCSET, PdfConstant.PDF_PROCSET_DEFAULT);
-//        entry.put(PdfConstant.PDF_FONT, null);
+        //entry.put(PdfConstant.PDF_PROCSET, PdfConstant.PDF_PROCSET_DEFAULT);
+        entry.put(PdfConstant.PDF_FONT, null);
     }
 
     /**
@@ -98,10 +98,25 @@ public class PdfResource extends PdfObject {
         fontList.add(font);
     }
 
-    public String dumpInfo() {
-        String str = String.valueOf(getRefID()) + " 0 obj" + PdfConstant.PDF_LF;
+    public byte[] dumpInfo() {
+        String str = String.valueOf(getRefID()) + " 0 obj " + PdfConstant.PDF_LF;
         str += PdfConstant.PDF_OP_BRACKET + PdfConstant.PDF_LF;
-        str += PdfConstant.PDF_PROCSET + " " + PdfConstant.PDF_PROCSET_DEFAULT + PdfConstant.PDF_LF;
+        //str += PdfConstant.PDF_PROCSET + " " + PdfConstant.PDF_PROCSET_DEFAULT + PdfConstant.PDF_LF;
+        for (String key : entry.keySet()) {
+            //str += key + " " + entry.get(key) + PdfConstant.PDF_LF;
+            if (key.equals(PdfConstant.PDF_FONT) && fontList.size() > 0) {
+                str += PdfConstant.PDF_FONT + PdfConstant.PDF_LF;
+                str += PdfConstant.PDF_OP_BRACKET + PdfConstant.PDF_LF;
+                for (PdfFont font : fontList) {
+                    str += new String(font.dumpInfo());
+                }
+                str += PdfConstant.PDF_CL_BRACKET + PdfConstant.PDF_LF;     
+            } 
+        }
+        str += PdfConstant.PDF_CL_BRACKET + PdfConstant.PDF_LF;
+        str += "endobj " + PdfConstant.PDF_LF;
+        objLength = str.length();
+/*
         if (fontList.size() > 0) {
             str += PdfConstant.PDF_FONT + PdfConstant.PDF_LF;
             str += PdfConstant.PDF_OP_BRACKET + PdfConstant.PDF_LF;
@@ -110,9 +125,10 @@ public class PdfResource extends PdfObject {
             }
             str += PdfConstant.PDF_CL_BRACKET + PdfConstant.PDF_LF;
         } 
-        str += PdfConstant.PDF_CL_BRACKET + PdfConstant.PDF_LF;
-        str += "endobj" + PdfConstant.PDF_LF;
-        objLength = str.length();
+*/
+//        str += PdfConstant.PDF_CL_BRACKET + PdfConstant.PDF_LF;
+//        str += "endobj" + PdfConstant.PDF_LF;
+//        objLength = str.length();
         /**
          * /F0 
          * <<
@@ -129,7 +145,7 @@ public class PdfResource extends PdfObject {
          * >>
          */
 
-        return str;
+        return str.getBytes();
     }
 
     /**

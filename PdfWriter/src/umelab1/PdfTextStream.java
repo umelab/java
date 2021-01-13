@@ -32,8 +32,8 @@ public class PdfTextStream extends PdfObject {
 
         //PdfDocumentにPdfResourceを登録する
         //printInfoがコールされた時にdumpInfoがコールされる
-        doc.add(this);
-
+        pdfDoc.add(this);
+        pdfPage.setTextStream(this);
         setRefID(ai.getAndIncrement());
     }
 
@@ -111,18 +111,25 @@ public class PdfTextStream extends PdfObject {
         return que;
     }
 
-    public String dumpInfo() {
+    public byte[] dumpInfo() {
+        String binfo = "";//"1. 0. 0. 1. 50. 790. cm" + PdfConstant.PDF_LF;
+        for (String info : que) {
+            binfo += info;
+        } 
+        int length = binfo.length();
         String streamInfo = String.valueOf(getRefID()) + " 0 obj " + PdfConstant.PDF_LF;
-        streamInfo += "<< >>" + PdfConstant.PDF_LF;
+        streamInfo += "<< /Length " + String.valueOf(length) + " >>" + PdfConstant.PDF_LF;
         streamInfo += "stream" + PdfConstant.PDF_LF;
+        //streamInfo += "1. 0. 0. 1. 50. 790. cm" + PdfConstant.PDF_LF;
+        //ここが問題 String⇒byte[]
         for (String info : que) {
             streamInfo += info;
         } 
         streamInfo += "endstream" + PdfConstant.PDF_LF;
-        streamInfo += "endobj" + PdfConstant.PDF_LF;
+        streamInfo += "endobj " + PdfConstant.PDF_LF;
 
         objLength = streamInfo.length();
-        return streamInfo;
+        return streamInfo.getBytes();
     }
 
     public int getObjSize() {

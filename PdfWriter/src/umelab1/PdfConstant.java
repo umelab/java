@@ -5,7 +5,7 @@ public class PdfConstant {
     /**
      * 改行
      */
-    public static final String PDF_LF               = " \n";
+    public static final String PDF_LF               = "\n";
 
     /**
      * ディクショナリ開始マーク
@@ -73,6 +73,10 @@ public class PdfConstant {
     public static final String PDF_CATALOG          = "/Catalog";
 
     /**
+     * Version
+     */
+    public static final String PDF_VERSION          = "/Version";
+    /**
      * Pages
      */
     public static final String PDF_PAGES            = "/Pages";
@@ -98,9 +102,19 @@ public class PdfConstant {
     public static final String PDF_PARENT           = "/Parent";
 
     /**
+     * Contents
+     */
+    public static final String PDF_CONTENTS         = "/Contents";
+
+    /**
+     * MediaBox
+     */
+    public static final String PDF_MEDIABOX         = "/MediaBox";
+
+    /**
      * Resource
      */
-    public static final String PDF_RESOURCE         = "/Resource";
+    public static final String PDF_RESOURCE         = "/Resources";
     
     /**
      * Font
@@ -115,7 +129,7 @@ public class PdfConstant {
     /**
      * SubType
      */
-    public static final String PDF_SUBTYPE          = "/SubType";
+    public static final String PDF_SUBTYPE          = "/Subtype";
 
     /**
      * ProcSet

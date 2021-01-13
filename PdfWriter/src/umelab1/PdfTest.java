@@ -15,7 +15,7 @@ public class PdfTest
  //       doc.addPage(page2);             //ArrayList size -> 2
 
 
-        PdfFont font1 = new PdfFont(PdfFont.TIMES_ROMAN, false, false);
+        PdfFont font1 = new PdfFont(PdfFont.HELVETICA, false, false);
  //       PdfFont font2 = new PdfFont(PdfFont.COURIER, false, false);
 
         page1.addFont(font1);
@@ -23,9 +23,11 @@ public class PdfTest
         
         PdfTextStream stream = new PdfTextStream(doc, page1);
         stream.beginText();
-        stream.setFont(font1, 14);
-        stream.setTextPosition(123, 456);
-        stream.setText("This is a Test");
+        stream.setFont(font1, 46);
+        stream.setTextPosition(100, 200);
+        stream.setText("Hello Worldt");
+//        stream.setTextPosition(1, -20);
+//        stream.setText("Another test in here.");
         stream.endText();
 
         doc.printInfo();

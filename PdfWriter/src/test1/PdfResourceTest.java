@@ -11,6 +11,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.HashMap;
 
 import org.junit.Assert;
 import org.junit.After;
@@ -137,7 +138,7 @@ public class PdfResourceTest {
         String expected_value = "1 0 obj \n<< \n/ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ] \n>> \n";
 
         PdfResource resrc = new PdfResource();
-        actual_value = resrc.dumpInfo();
+        actual_value = new String(resrc.dumpInfo());
  
         assertThat(actual_value, equalTo(expected_value));
     }
@@ -154,9 +155,24 @@ public class PdfResourceTest {
 
         PdfResource resrc = new PdfResource();
         resrc.addFont(new PdfFont(PdfFont.HELVETICA, false, false));
-        actual_value = resrc.dumpInfo();
+        actual_value = new String(resrc.dumpInfo());
  
         assertThat(actual_value, equalTo(expected_value));
+    }
+
+    /**
+     * Test entry keys are properly defined.
+     * @throws Exception
+     */
+    @Test
+    public void Test_Entry() throws Exception {
+        String[] expected_value = {"/ProcSet", "/Font"};
+
+        PdfResource resrc = new PdfResource();
+        //execute test
+        HashMap<String, String> entry = resrc.getEntry();
+        //confirm
+        assertThat(entry.keySet(), hasItems(expected_value));        
     }
 
 }

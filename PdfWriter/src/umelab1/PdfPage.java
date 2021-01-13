@@ -13,6 +13,11 @@ public class PdfPage extends PdfObject {
     private PdfResource resource = null;
 
     /**
+     * PdfTextStream
+     */
+    private PdfTextStream stream = null;
+
+    /**
      * 参照番号
      */
     private int refno;
@@ -29,6 +34,8 @@ public class PdfPage extends PdfObject {
         super(PdfConstant.PDF_PAGE);
         entry.put(PdfConstant.PDF_PARENT, null);
         entry.put(PdfConstant.PDF_RESOURCE, null);
+        entry.put(PdfConstant.PDF_CONTENTS, null);
+        entry.put(PdfConstant.PDF_MEDIABOX, null);
         setRefID(ai.getAndIncrement());
         resource = new PdfResource();
     }
@@ -59,6 +66,10 @@ public class PdfPage extends PdfObject {
         return refInfo;
     }
 
+    public void setTextStream(PdfTextStream stream) {
+        this.stream = stream;
+    }
+
     /**
      * Pagesオブジェクトを設定する
      * @param pages 設定するPagesオブジェクト
@@ -81,7 +92,7 @@ public class PdfPage extends PdfObject {
      * PdfPageの情報を出力する
      * @return 出力するPdfPage情報
      */
-    public String dumpInfo() {
+    public byte[] dumpInfo() {
         String value;
         String str = String.valueOf(getRefID()) + " 0 obj " + PdfConstant.PDF_LF;
         str += PdfConstant.PDF_OP_BRACKET + PdfConstant.PDF_LF;
@@ -92,14 +103,19 @@ public class PdfPage extends PdfObject {
                 value = pages.getRefStr();
             } else if (key.equals(PdfConstant.PDF_RESOURCE) && value == null) {
                 value = resource.getRefStr();
+            } else if (key.equals(PdfConstant.PDF_CONTENTS) && value == null) {
+                value = stream.getRefStr();
+            } else if (key.equals(PdfConstant.PDF_MEDIABOX) && value == null) {
+                //temp setup
+                value = "[0.0 0.0 612.0 792.0]";
             }
-            str += key + " " + value + " \n";
+            str += key + " " + value + PdfConstant.PDF_LF;
         }
         str += PdfConstant.PDF_CL_BRACKET + PdfConstant.PDF_LF;
-        str += PdfConstant.PDF_END_OBJ + PdfConstant.PDF_LF;
+        str += PdfConstant.PDF_END_OBJ + " " + PdfConstant.PDF_LF;
 
         objLength = str.length();
-        return str;
+        return str.getBytes();
     }
 
     /**

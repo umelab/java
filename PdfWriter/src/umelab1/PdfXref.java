@@ -28,12 +28,12 @@ public class PdfXref extends PdfObject {
      * XRef情報を出力する
      * @return 出力するXRef情報
      */
-    public String dumpInfo() {
+    public byte[] dumpInfo() {
         String str = "";
-        str += PdfConstant.PDF_XREF + " \n";
-        str += "0 " + String.valueOf(count+1) + " \n";
+        str += PdfConstant.PDF_XREF + PdfConstant.PDF_LF;
+        str += "0 " + String.valueOf(count) + PdfConstant.PDF_LF;
         str += getXRefTable();
-        return str;
+        return str.getBytes();
     }
 
     /**
@@ -43,11 +43,16 @@ public class PdfXref extends PdfObject {
     private String getXRefTable() {
         String table = "";
         String fmt = "%010d";
+        //remove last
+        xrefList.removeLast();
+
         Iterator<Integer> iterator = xrefList.iterator();
-        table = PdfConstant.PDF_XREF_HEADER + " \n";
+
+
+        table = PdfConstant.PDF_XREF_HEADER + " " + PdfConstant.PDF_LF;
         while(iterator.hasNext()) {
             int xrefContext = iterator.next();
-            table += String.format(Locale.ENGLISH, fmt, xrefContext) + " 00000 n \n";
+            table += String.format(Locale.ENGLISH, fmt, xrefContext) + " 00000 n " + PdfConstant.PDF_LF;
         }
         return table;
     }

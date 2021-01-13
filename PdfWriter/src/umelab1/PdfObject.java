@@ -31,7 +31,11 @@ public abstract class PdfObject {
         return this.name;
     }
 
-    public abstract String dumpInfo();
+    public abstract byte[] dumpInfo();
 
     public abstract int getObjSize();
+
+    protected HashMap<String, String> getEntry() {
+        return entry;
+    }
 }

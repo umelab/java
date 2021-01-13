@@ -54,7 +54,7 @@ public class PdfFont extends PdfObject {
 
         entry.put(PdfConstant.PDF_BASEFONT, font.getBaseFont());
         entry.put(PdfConstant.PDF_SUBTYPE, font.getFontType());
-        setRefID(ai.getAndIncrement());
+        //setRefID(ai.getAndIncrement());
     }
 
     /**
@@ -87,19 +87,19 @@ public class PdfFont extends PdfObject {
         return "/F" + String.valueOf(getRefID());
     }
 
-    public String dumpInfo() {
+    public byte[] dumpInfo() {
         String fontInfo = "";
         String value;
         fontInfo += "/F" + String.valueOf(getRefID()) + PdfConstant.PDF_LF;
         fontInfo += PdfConstant.PDF_OP_BRACKET + PdfConstant.PDF_LF;
         for (String key : entry.keySet()) {
             value = entry.get(key);
-            fontInfo += key + " " + value + " \n";
+            fontInfo += key + " " + value + PdfConstant.PDF_LF;
         }
         fontInfo += PdfConstant.PDF_CL_BRACKET + PdfConstant.PDF_LF;
 
         objLength = fontInfo.length();
-        return fontInfo;
+        return fontInfo.getBytes();
     }
 
     /**

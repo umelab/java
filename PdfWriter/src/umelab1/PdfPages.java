@@ -75,7 +75,7 @@ public class PdfPages extends PdfObject {
     /**
      * PdfPagesの情報を出力する
      */
-    public String dumpInfo() {
+    public byte[] dumpInfo() {
         String value;
         String str = String.valueOf(getRefID()) + " 0 obj " + PdfConstant.PDF_LF;
         str += PdfConstant.PDF_OP_BRACKET + PdfConstant.PDF_LF;
@@ -90,10 +90,10 @@ public class PdfPages extends PdfObject {
             str += key + " " + value + PdfConstant.PDF_LF;
         }
         str += PdfConstant.PDF_CL_BRACKET + PdfConstant.PDF_LF;
-        str += PdfConstant.PDF_END_OBJ + PdfConstant.PDF_LF;
+        str += PdfConstant.PDF_END_OBJ + " " + PdfConstant.PDF_LF;
 
         objLength = str.length();
-        return str;
+        return str.getBytes();
     }
 
     /**

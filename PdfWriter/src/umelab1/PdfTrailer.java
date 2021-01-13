@@ -28,19 +28,19 @@ public class PdfTrailer extends PdfObject{
         entry.put(PdfConstant.PDF_SIZE, String.valueOf(objCount));
     }
 
-    public String dumpInfo() {
+    public byte[] dumpInfo() {
         String str = "";
-        str += PdfConstant.PDF_TRAILER + " \n";
-        str += "<< \n";
+        str += PdfConstant.PDF_TRAILER + PdfConstant.PDF_LF;
+        str += "<<" + PdfConstant.PDF_LF;
         for (String key : entry.keySet()) {
-            str += key + " " + entry.get(key) + " \n";
+            str += key + " " + entry.get(key) + PdfConstant.PDF_LF;
         }
-        str += ">> \n";
-        str += PdfConstant.PDF_STARTXREF + " \n";
-        str += String.valueOf(getXRefOffset()) + " \n";
-        str += PdfConstant.PDF_EOF + " \n";        
+        str += ">>" + PdfConstant.PDF_LF;
+        str += PdfConstant.PDF_STARTXREF + PdfConstant.PDF_LF;
+        str += String.valueOf(getXRefOffset()) + PdfConstant.PDF_LF;
+        str += PdfConstant.PDF_EOF + PdfConstant.PDF_LF;        
 
-        return str;
+        return str.getBytes();
     }
 
     public void setXRefOffset(int startXrefOffset) {

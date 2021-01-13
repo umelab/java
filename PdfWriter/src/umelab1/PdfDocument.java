@@ -1,5 +1,7 @@
 package umelab;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayDeque;
 import java.util.Iterator;
 
@@ -37,11 +39,13 @@ public class PdfDocument extends PdfObject {
      * 初期処理
      */
     private void init() {
+        add(new PdfHeader());
         add(this);
         setRefID(ai.getAndIncrement());
-        //必要
-        entry("/Pages", Pages.getRefStr());
         pages = new PdfPages();
+        //必要
+        entry.put(PdfConstant.PDF_PAGES, pages.getRefStr());
+        entry.put(PdfConstant.PDF_VERSION, "/1.4");
         add(pages);
     }
 
@@ -96,63 +100,103 @@ public class PdfDocument extends PdfObject {
      * PdfDocumentに登録されているオブジェクト情報を出力する
      */
     public void printInfo() {
+        String filename = "c:\\resource\\test.pdf";
         Iterator<PdfObject> iterator = list.iterator();
         String dumpInfo = "";
         int incOffset = 0;
-        while(iterator.hasNext()) {
-            PdfObject o = iterator.next();
-            dumpInfo += o.dumpInfo();
-            incOffset += o.getObjSize();
-            xrefList.add(incOffset);
+        FileOutputStream fos = null;
+        ByteArrayOutputStream out = null;
+        
+        try {
+            out = new ByteArrayOutputStream();
+            while(iterator.hasNext()) {
+                PdfObject o = iterator.next();
+                //dumpInfo += o.dumpInfo();
+                out.write(o.dumpInfo());
+                incOffset += o.getObjSize();
+                xrefList.add(incOffset);
+            }
+            //System.out.print(dumpInfo);
+            
+            //dumpInfo += createXRef();
+            out.write(createXRef());
+            //dumpInfo += createPdfTrailer(incOffset);
+            out.write(createPdfTrailer(incOffset));
+            out.flush();
+
+            fos = new FileOutputStream(filename);
+            out.writeTo(fos);
+            fos.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fos.close();
+            }catch (Exception e){}
         }
-        System.out.print(dumpInfo);
-        createXRef();
-        createPdfTrailer(incOffset);
         //System.out.println("");
     }
 
     /**
      * PdfDocumentの情報を出力する
      */
-    public String dumpInfo() {
+    public byte[] dumpInfo() {
+        //char binMark = '\x7f';
+        /*
+        byte[] bytes = { 0x7f, 0x7f, 0x7f, 0x7f };
+        String binStr = null;
+        try {
+            binStr = new String(bytes, "UTF-16");
+        }catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         String str = "%PDF-1.4" + PdfConstant.PDF_LF;
-        str += "%\\0xf2\\0xf3\\0xcf\\0xf3" + PdfConstant.PDF_LF;
+        str += "%" + binStr + PdfConstant.PDF_LF;
+        */
+        String str = "";
         str += String.valueOf(getRefID()) + " 0 obj " + PdfConstant.PDF_LF;
         str += PdfConstant.PDF_OP_BRACKET + PdfConstant.PDF_LF;
         for (String key : entry.keySet()) {
             str += key + " " + entry.get(key) + PdfConstant.PDF_LF;
         }
         str += PdfConstant.PDF_CL_BRACKET + PdfConstant.PDF_LF;
-        str += "endobj";
+        str += "endobj " + PdfConstant.PDF_LF;
 
         objLength = str.length();
-        return str;
+        return str.getBytes();
     }
 
     /**
      * XRefオブジェクトを作成する
      */
-    private void createXRef() {
+    private byte[] createXRef() {
+        byte[] xrefInfo = null;
         PdfXref xref = new PdfXref();
         xref.setCount(list.size());
         xref.setTable(xrefList);
 
+        xrefInfo = xref.dumpInfo();
         //
-        System.out.print(xref.dumpInfo());
+        System.out.print(xrefInfo);
+
+        return xrefInfo;
     }
 
     /**
      * Trailerオブジェクトを作成する
      * @param xrefOffset
      */
-    private void createPdfTrailer(int xrefOffset) {
+    private byte[] createPdfTrailer(int xrefOffset) {
+        byte[] trailerInfo = null;
         PdfTrailer trailer = new PdfTrailer();
         trailer.setRoot(getRefStr());
         trailer.setCount(list.size());
         trailer.setXRefOffset(xrefOffset);
-
+        trailerInfo = trailer.dumpInfo();
         //
-        System.out.println(trailer.dumpInfo());
+        System.out.println(trailerInfo);
+
+        return trailerInfo;
     }
 
     /**
