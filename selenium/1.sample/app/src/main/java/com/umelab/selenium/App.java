@@ -9,10 +9,15 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 public class App {
     public void getConnection() {
-        WebDriver driver = new ChromeDriver();
+        // start chrome driver with headless mode
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless");
+
+        WebDriver driver = new ChromeDriver(options);
         driver.get("https://www.selenium.dev/selenium/web/web-form.html");
 
         String title = driver.getTitle();
