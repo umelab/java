@@ -4,6 +4,8 @@
 package com.umelab.selenium;
 
 import java.util.concurrent.TimeUnit;
+import java.util.List;
+import java.util.Iterator;
 
 import org.openqa.selenium.By;
 
@@ -23,12 +25,31 @@ public class App {
 
         driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
 
-        // WebElement name = driver.findElement(By.className(".pl-2 .col .tm-pc-detail-border-line .pt-1 .tm-pc-detail-info-curt-title"));
+        // ページタイトル
         WebElement name = driver.findElement(By.className("tm-pc-detail-frame-info-rvrnm"));
-        WebElement temp = driver.findElement(By.className("tm-pc-detail-info-curt-value"));
         System.out.println("content: " + name.getText());
-        System.out.println("temp: " + temp.getText());
-        
+
+        // 観測時間
+        WebElement currentTime = driver.findElement(By.cssSelector(".tm-pc-detail-info-latest-value.pb-1"));
+        String currentTimeText = currentTime.getText().replace("■最新観測値", "");
+        System.out.println("meatured time: " + currentTimeText);
+
+        // 観測値
+        List<WebElement> list = driver.findElements(By.className("tm-pc-detail-info-curt-value"));
+        Iterator iterator = list.iterator();
+        while(iterator.hasNext()) {
+            WebElement element = (WebElement)iterator.next();
+            System.out.println("content1: " + element.getText());
+        }
+
+        // 観測値
+        Object obj[] = list.toArray();
+        System.out.println("水温: " + ((WebElement)obj[0]).getText());
+        System.out.println("pH: " + ((WebElement)obj[1]).getText());
+        System.out.println("DO: " + ((WebElement)obj[2]).getText());
+        System.out.println("伝導率: " + ((WebElement)obj[3]).getText());
+        System.out.println("濁度: " + ((WebElement)obj[4]).getText());
+
         driver.quit();
     }
 
