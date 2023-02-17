@@ -20,6 +20,9 @@ public class App {
         WebDriver driver = new ChromeDriver();
         driver.get(url);
 
+        String source = driver.getPageSource();
+        System.out.println("source: " + source);
+        
         String title = driver.getTitle();
         System.out.println("Web from: " + title);  
 

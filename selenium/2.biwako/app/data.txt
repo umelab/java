@@ -1,3 +1,7 @@
+三保ヶ崎：https://www.river.go.jp/kawabou/pcfull/tm?itmkndCd=6&ofcCd=22039&obsCd=7&isCurrent=true&fld=0
+安曇川沖：https://www.river.go.jp/kawabou/pcfull/tm?itmkndCd=6&ofcCd=22039&obsCd=6&isCurrent=true&fld=0
+
+
 <div data-v-234a1006="" class="row no-gutters align-center justify-start"><div data-v-234a1006="" class="ma-2 col-md-auto col"><img data-v-234a1006="" src="/kawabou/img/obs_icons/obs_quality.svg" class="tm-pc-detail-icon"><span data-v-234a1006="" class="v-tooltip v-tooltip--top"><!----></span></div><div data-v-234a1006="" class="ma-2 col-md-auto col"><div data-v-234a1006="" class="tm-pc-detail-frame-info-rvrnm-kana">
               あどがわおきちゅうおう(きこう)
             </div><div data-v-234a1006="" class="tm-pc-detail-frame-info-rvrnm">
