@@ -1,0 +1,61 @@
+private void registLocation() {
+    List<TempLocation> list = new ArrayList<TempLocation>();
+    IDataCollector level = new LevelLocation(url);
+    IDataCollector discharge = new Discharge(url1);
+    IDataCollector temp = new TempLocation(url2);
+
+    //list.add(IDataCollector temp1 = new TempLocation(url1));
+    //list.add(IDataCollector temp2 = new TempLocation(url2));
+
+    collectList = new ArrayList<IDataCollector>();
+    collectList.add(level);
+    collectList.add(discharge);
+    collectList.add(temp);
+}
+
+private void parseWeb(){
+    Iterator iterator = collectList.iterator();
+    while(iterator.hasNext()){
+        IDataCollector collector = iterator.next();
+        collector.parse();
+        //collector.accept(new MesuredData());
+    }
+}
+
+private void insertData(){
+    Iterator iterator = collectList.iterator();
+    while(iterator.hasNext()){
+        IDataCollector collector = iterator.next();
+        String data = collector.accept(new MesuredData());
+        String sql = buildSql(collector);
+    }    
+}
+
+private String buildSql(IDataCollector collector) {
+    switch(collector.getType()){
+        // 水温
+        case WATERTEMP:
+            createWaterTempSql(collector);
+            break;
+        // 放水
+        case WATERCHARGE:
+            createWaterDischargeSql(collector);
+            break;
+        // 水位
+        case WATERLEVEL:
+            createWaterLevelSql(collector);
+            break;
+    }
+}
+...
+
+MesuredData mesuredData = new MesuredData();
+while(){
+    Object obj = iterator.next();
+    // 水温取得
+    String data = obj.accept(mesuredData);
+}
+
+String waterLevel = level.accept(mesuredData);
+String waterDischarge = discharge.accept(mesuredData);
+
