@@ -23,6 +23,7 @@ dependencies {
     implementation 'org.seleniumhq.selenium:selenium-java:latest.release'
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:31.1-jre'
+    implementation 'mysql:mysql-connector-java:8.0.23'
 }
 
 application {

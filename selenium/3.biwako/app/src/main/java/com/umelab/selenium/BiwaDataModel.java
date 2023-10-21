@@ -1,6 +1,7 @@
 package com.umelab.selenium;
 
 public class BiwaDataModel {
+    private String currentTime;
     private String temp;
     private String ph;
     private String dox;
@@ -9,6 +10,14 @@ public class BiwaDataModel {
 
     public BiwaDataModel() {
     
+    }
+
+    public void setCurrentTime(String currentTime){
+       this.currentTime = currentTime;
+    }
+
+    public String getCurrentTime(){
+       return currentTime;
     }
 
     /**
@@ -47,7 +56,7 @@ public class BiwaDataModel {
      * DO
      * @param dox
      */
-    public void setDox(String dox) {
+    public void setDO(String dox) {
         this.dox = dox;
     }
 
@@ -55,7 +64,7 @@ public class BiwaDataModel {
      * DO
      * @return
      */
-    public String getDox() {
+    public String getDO() {
         return dox;
     }
 

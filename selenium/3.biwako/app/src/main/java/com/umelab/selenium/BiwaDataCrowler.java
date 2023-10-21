@@ -44,7 +44,7 @@ public class BiwaDataCrowler {
         driver.get(url);
 
         String source = driver.getPageSource();
-        System.out.println("source: " + source);
+        //System.out.println("source: " + source);
         
         String title = driver.getTitle();
         System.out.println("Web from: " + title);  
@@ -75,7 +75,8 @@ public class BiwaDataCrowler {
         model.setDO(((WebElement)obj[2]).getText());
         model.setConductivity(((WebElement)obj[3]).getText());
         model.setTurbidity(((WebElement)obj[4]).getText());
-        
+  	model.setCurrentTime(currentTimeText);     
+   
         System.out.println("水温: " + ((WebElement)obj[0]).getText());
         System.out.println("pH: " + ((WebElement)obj[1]).getText());
         System.out.println("DO: " + ((WebElement)obj[2]).getText());
