@@ -12,32 +12,32 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 public class App {
     private static String url = "https://www.river.go.jp/kawabou/pcfull/tm?itmkndCd=6&ofcCd=22039&obsCd=6&isCurrent=true&fld=0";
 
     public void getConnection() {
-        WebDriver driver = new ChromeDriver();
+	ChromeOptions options = new ChromeOptions();
+	options.addArguments("no-sandbox");
+	//options.addArguments("--disable-extensions");
+	options.addArguments("--headless");
+        WebDriver driver = new ChromeDriver(options);
         driver.get(url);
 
         String source = driver.getPageSource();
-        System.out.println("source: " + source);
+        //System.out.println("source: " + source);
         
         String title = driver.getTitle();
         System.out.println("Web from: " + title);  
 
         driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
 
-        // ページタイトル
         WebElement name = driver.findElement(By.className("tm-pc-detail-frame-info-rvrnm"));
         System.out.println("content: " + name.getText());
 
-        // 観測時間
         WebElement currentTime = driver.findElement(By.cssSelector(".tm-pc-detail-info-latest-value.pb-1"));
-        String currentTimeText = currentTime.getText().replace("■最新観測値", "");
-        System.out.println("meatured time: " + currentTimeText);
 
-        // 観測値
         List<WebElement> list = driver.findElements(By.className("tm-pc-detail-info-curt-value"));
         Iterator iterator = list.iterator();
         while(iterator.hasNext()) {
@@ -45,13 +45,12 @@ public class App {
             System.out.println("content1: " + element.getText());
         }
 
-        // 観測値
         Object obj[] = list.toArray();
-        System.out.println("水温: " + ((WebElement)obj[0]).getText());
-        System.out.println("pH: " + ((WebElement)obj[1]).getText());
-        System.out.println("DO: " + ((WebElement)obj[2]).getText());
-        System.out.println("伝導率: " + ((WebElement)obj[3]).getText());
-        System.out.println("濁度: " + ((WebElement)obj[4]).getText());
+        System.out.println("水温:" + ((WebElement)obj[0]).getText());
+        System.out.println("pH:" + ((WebElement)obj[1]).getText());
+        System.out.println("Do:" + ((WebElement)obj[2]).getText());
+        System.out.println("dendo:" + ((WebElement)obj[3]).getText());
+        System.out.println("turb:" + ((WebElement)obj[4]).getText());
 
         driver.quit();
     }
