@@ -77,6 +77,10 @@ public class GraphDataCreator {
         //current graph data
         String currentData = extractTemperatureData(0, siteID);
         createFile(filePathCurrentData, header, currentData);
+
+        String pastData = extractTemperatureData(1, siteID);
+        System.out.println(pastData);
+        createFile(filePathPastData, header, pastData);
     }
 
     private void createFile(String filePath, String header, String data) {
