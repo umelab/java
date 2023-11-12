@@ -128,7 +128,7 @@ public class GraphDataCreator {
         Iterator it = stack.iterator();
 
         while (it.hasNext()) {
-            tempData += it.next() + " ";
+            tempData += it.next() + ",";
         }
         return tempData;
     }
@@ -148,7 +148,7 @@ public class GraphDataCreator {
                 startHour = 0;
                 increment = 0;
             }
-            header += (startHour + increment) + ":00 ";
+            header += (startHour + increment) + ":00,";
             increment++;
         }
         return header;
