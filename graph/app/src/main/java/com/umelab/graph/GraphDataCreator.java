@@ -25,6 +25,7 @@ public class GraphDataCreator {
         getCurrentHour();
         // createGraphHeader();
         // createGraphContext();
+        initConnection();
         createGraph(1);
     }
 
