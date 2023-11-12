@@ -3,7 +3,9 @@ package com.umelab.graph;
 import java.util.Calendar;
 import java.util.Stack;
 import java.util.Iterator;
-
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
@@ -22,7 +24,7 @@ public class GraphDataCreator {
     public GraphDataCreator() throws SQLException {
         getCurrentHour();
         createGraphHeader();
-        createGraphData();
+        createGraphContext();
     }
 
     private void initConnection() throws SQLException {
@@ -47,26 +49,47 @@ public class GraphDataCreator {
     /**
      * グラフのヘッダーを作成する
      */
-    private void createGraphHeader() {
+    private String createGraphHeader() {
         // create graph header
         int currentHour = getCurrentHour();
         int startHour = currentHour + 1;
         String header = getHeaderTimeLine(startHour, currentHour);
-        System.out.println(header);
+        return header;
     }
 
     /**
      * グラフのデータを作成する
      */
-    private void createGraphData() throws SQLException {
+    private String createGraphContext() throws SQLException {
         // create graph data
         initConnection();
         String data = extractTemperatureData(0, 1);
-        System.out.println("----------");
-        System.out.println(data);
-        System.out.println("----------");
+        return data;
     }
 
+    public void createGraph(int siteID){
+        String filePathCurrentData = "/home/umeda/bassyan_public/biwako-data/adogawa-current.csv";
+        String filePathPastData    = "/home/umeda/bassyan_public/biwako-data/adogawa-yesterday.csv";
+
+        String header = createGraphHeader();
+        //current graph data
+        String currentData = extractTemperatureData(0, siteID);
+        createFile(filePathCurrentData, header, currentData);
+    }
+
+    private void createFile(String filePath, String header, String data) {
+        String context = header + "\n";
+        context += data;
+        File file = new File(filePath);
+        try {
+            FileWriter filewriter = new FileWriter(file);
+            filewriter.write(context);
+            filewriter.close();
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }
+    
     /**
      * 温度データを取得する
      * @return 温度データ
