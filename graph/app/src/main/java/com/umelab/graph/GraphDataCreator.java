@@ -21,14 +21,20 @@ public class GraphDataCreator {
 
     private Connection conn = null;
 
+    /**
+     * コンストラクタ
+     * @throws SQLException
+     */
     public GraphDataCreator() throws SQLException {
         getCurrentHour();
-        // createGraphHeader();
-        // createGraphContext();
         initConnection();
         createGraph(1);
     }
 
+    /**
+     * DBとの接続を初期化する
+     * @throws SQLException
+     */
     private void initConnection() throws SQLException {
         conn = DriverManager.getConnection(
 		    "jdbc:mysql://localhost:3306/biwako1",
@@ -60,32 +66,34 @@ public class GraphDataCreator {
     }
 
     /**
-     * グラフのデータを作成する
+     * グラフを作成する
      */
-    private String createGraphContext() throws SQLException {
-        // create graph data
-        initConnection();
-        String data = extractTemperatureData(0, 1);
-        return data;
-    }
-
     public void createGraph(int siteID){
         String filePathCurrentData = "/home/umeda/bassyan_public/biwako-data/adogawa-current.csv";
         String filePathPastData    = "/home/umeda/bassyan_public/biwako-data/adogawa-yesterday.csv";
 
         String header = createGraphHeader();
+
         //current graph data
         String currentData = extractTemperatureData(0, siteID);
         System.out.println("------------------");
         System.out.println(currentData);
         createFile(filePathCurrentData, header, currentData);
 
+        //past graph data
         String pastData = extractTemperatureData(1, siteID);
         System.out.println("------------------");
         System.out.println(pastData);
         createFile(filePathPastData, header, pastData);
     }
 
+
+    /**
+     * グラフ表示用のファイルを作成する
+     * @param filePath グラフ表示用のファイルパス
+     * @param header グラフのヘッダー
+     * @param data グラフのデータ
+     */
     private void createFile(String filePath, String header, String data) {
         String context = header + "\n";
         context += data;
@@ -106,20 +114,21 @@ public class GraphDataCreator {
     private String extractTemperatureData(int extractType, int siteId) {
         String sql = "select day, hour, temperature from Temperature where siteID = " + String.valueOf(siteId) + " order by year desc, month desc, day desc, hour desc";        
         String tempData = ""; 
-        Stack stack = new Stack();
+        Stack<String> stack = new Stack<>();
 
         try {
             Statement stmt1 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet rs = stmt1.executeQuery(sql);
-            
-            
+                    
             int cnt = 0;
 
+            // 0: current, 1: past
+            // 過去データを取得する場合は24レコード目から取得する
             if (extractType == 1) {
                 rs.absolute(24);
             }
+            // データを取得する
             while (rs.next()) {
-                //tempData += rs.getString("temperature") + " ";
                 String data = rs.getString("temperature");
                 String day = rs.getString("day");
                 String hour = rs.getString("hour");

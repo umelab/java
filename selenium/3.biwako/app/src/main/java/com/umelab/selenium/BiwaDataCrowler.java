@@ -85,8 +85,4 @@ public class BiwaDataCrowler {
 
         driver.quit();
     }
-    // public static void main(String[] args) {
-    //     App app = new App();
-    //     app.getConnection();
-    // }
 }
