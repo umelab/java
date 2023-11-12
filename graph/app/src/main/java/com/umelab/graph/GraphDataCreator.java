@@ -1,6 +1,9 @@
 package com.umelab.graph;
 
 import java.util.Calendar;
+import java.util.Stack;
+import java.util.Iterator;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
@@ -58,7 +61,7 @@ public class GraphDataCreator {
     private void createGraphData() throws SQLException {
         // create graph data
         initConnection();
-        String data = extractTemperatureData();
+        String data = extractTemperatureData(0, 1);
         System.out.println("----------");
         System.out.println(data);
         System.out.println("----------");
@@ -68,17 +71,26 @@ public class GraphDataCreator {
      * 温度データを取得する
      * @return 温度データ
      */
-    private String extractTemperatureData() {
-        String sql = "select temperature from Temperature order by year desc, month desc, day desc, hour desc";        
+    private String extractTemperatureData(int extractType, int siteId) {
+        String sql = "select temperature from Temperature where siteID = " + String.valueOf(siteId) + " order by year desc, month desc, day desc, hour desc";        
         String tempData = ""; 
-        
+        Stack stack = new Stack();
+
         try {
             Statement stmt1 = conn.createStatement();
             ResultSet rs = stmt1.executeQuery(sql);
-            int cnt = 0;
             
+            
+            int cnt = 0;
+
+            if (extractType == 1) {
+                rs.absolute(24);
+            }
             while (rs.next()) {
-                tempData += rs.getString("temperature") + " ";
+                //tempData += rs.getString("temperature") + " ";
+                String data = rs.getString("temperature");
+                stack.push(data);
+                
                 cnt++;
                 if (cnt == 24) {
                     break;
@@ -86,6 +98,12 @@ public class GraphDataCreator {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+
+        Iterator it = stack.iterator();
+
+        while (it.hasNext()) {
+            tempData += it.next() + " ";
         }
         return tempData;
     }
