@@ -23,8 +23,9 @@ public class GraphDataCreator {
 
     public GraphDataCreator() throws SQLException {
         getCurrentHour();
-        createGraphHeader();
-        createGraphContext();
+        // createGraphHeader();
+        // createGraphContext();
+        createGraph(1);
     }
 
     private void initConnection() throws SQLException {
@@ -89,7 +90,7 @@ public class GraphDataCreator {
             System.out.println(e);
         }
     }
-    
+
     /**
      * 温度データを取得する
      * @return 温度データ
