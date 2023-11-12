@@ -135,10 +135,9 @@ public class GraphDataCreator {
             e.printStackTrace();
         }
 
-        Iterator it = stack.iterator();
-
-        while (it.hasNext()) {
-            tempData += it.next() + ",";
+        int size = stack.size();
+        for (int i = 0; i < size; i++) {
+            tempData += stack.pop() + ",";
         }
         return tempData;
     }
