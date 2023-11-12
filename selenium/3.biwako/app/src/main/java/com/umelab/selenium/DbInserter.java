@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class DbInserter {
     private Connection conn = null;
@@ -24,8 +26,15 @@ public class DbInserter {
 	conn.setAutoCommit(false);
     }
 
+   private String getCurrentTime(){
+       Calendar cal = Calendar.getInstance();
+       SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+       String currentTime = sdf.format(cal.getTime());
+       return currentTime;
+   }
+
    public void insertData() throws Exception {
-        String currentTime = model.getCurrentTime();
+        String currentTime = getCurrentTime();
         System.out.println("currentTime:" + currentTime);
 	String ymd[] = currentTime.split("/");
 	int year = Integer.parseInt(ymd[0]);

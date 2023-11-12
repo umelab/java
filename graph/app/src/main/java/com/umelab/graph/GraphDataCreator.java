@@ -78,7 +78,7 @@ public class GraphDataCreator {
             int cnt = 0;
             
             while (rs.next()) {
-                tempData += rs.getString("temperature");
+                tempData += rs.getString("temperature") + " ";
                 cnt++;
                 if (cnt == 24) {
                     break;
