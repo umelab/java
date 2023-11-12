@@ -101,7 +101,7 @@ public class GraphDataCreator {
      * @return 温度データ
      */
     private String extractTemperatureData(int extractType, int siteId) {
-        String sql = "select temperature from Temperature where siteID = " + String.valueOf(siteId) + " order by year desc, month desc, day desc, hour desc";        
+        String sql = "select day, hour, temperature from Temperature where siteID = " + String.valueOf(siteId) + " order by year desc, month desc, day desc, hour desc";        
         String tempData = ""; 
         Stack stack = new Stack();
 
@@ -118,6 +118,9 @@ public class GraphDataCreator {
             while (rs.next()) {
                 //tempData += rs.getString("temperature") + " ";
                 String data = rs.getString("temperature");
+                String day = rs.getString("day");
+                String hour = rs.getString("hour");
+                System.out.println(day + " " + hour + ":00 " + data);
                 stack.push(data);
                 
                 cnt++;
