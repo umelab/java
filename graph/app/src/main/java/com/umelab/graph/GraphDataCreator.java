@@ -106,7 +106,7 @@ public class GraphDataCreator {
         Stack stack = new Stack();
 
         try {
-            Statement stmt1 = conn.createStatement();
+            Statement stmt1 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet rs = stmt1.executeQuery(sql);
             
             
