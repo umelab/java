@@ -25,10 +25,10 @@ public class GraphDataCreator {
      * コンストラクタ
      * @throws SQLException
      */
-    public GraphDataCreator() throws SQLException {
+    public GraphDataCreator(int id) throws SQLException {
         getCurrentHour();
         initConnection();
-        createGraph(1);
+        createGraph(id);
     }
 
     /**
@@ -69,8 +69,38 @@ public class GraphDataCreator {
      * グラフを作成する
      */
     public void createGraph(int siteID){
-        String filePathCurrentData = "/home/umeda/bassyan_public/biwako-data/adogawa-current.csv";
-        String filePathPastData    = "/home/umeda/bassyan_public/biwako-data/adogawa-yesterday.csv";
+        String current = "-current.csv";
+        String past = "-yesterday.csv";
+        String place = "";
+        String filePathCurrentData = "/home/umeda/bassyan_public/biwako-data/";//adogawa-current.csv";
+        String filePathPastData    = "/home/umeda/bassyan_public/biwako-data/";//adogawa-yesterday.csv";
+
+        switch(siteID) {
+            case 1:
+                place = "adogawa";
+                break;
+            case 2:
+                place = "biwako-ohashi";
+                break;
+            case 3:
+                place = "ogoto";
+                break;
+            case 4:
+                place = "mihogasaki";
+                break;
+            case 5:
+                place = "karasaki";
+                break;
+            case 6:
+                place = "setagawa";
+                break;
+        }
+
+        filePathCurrentData += place + current;
+        filePathPastData += place + past;
+        System.out.println("------ filepath -------");
+        System.out.println(filePathCurrentData);
+        System.out.println("-----------------------");
 
         String header = createGraphHeader();
 
