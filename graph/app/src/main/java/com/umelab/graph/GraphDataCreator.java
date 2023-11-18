@@ -89,7 +89,7 @@ public class GraphDataCreator {
                 place = "mihogasaki";
                 break;
             case 5:
-                place = "karasaki";
+                place = "karahashi";
                 break;
             case 6:
                 place = "setagawa";
