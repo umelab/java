@@ -21,11 +21,19 @@ public class BiwaFlowLevelCrowler {
     private WebDriver driver;
     private BiwaFlowLevelModel model;
 
+    /**
+     * コンストラクタ
+     * @param url
+     */
     public BiwaFlowLevelCrowler(String url) {
         this.url = url;
         init();
     }
 
+    /**
+     * モデルを設定
+     * @param model
+     */
     public void setModel(BiwaFlowLevelModel model) {
         this.model = model;
     }
@@ -40,7 +48,7 @@ public class BiwaFlowLevelCrowler {
         options.addArguments("--disable-gpu");
         driver = new ChromeDriver(options);
     }
-
+ß
     /**
      * 全角を半角に変換
      * @param text
@@ -79,7 +87,7 @@ public class BiwaFlowLevelCrowler {
         waterLevel = waterLevel.substring(0, waterLevel.length() - 2);
         // 全角を半角に変換
         waterLevel = ToHankaku(waterLevel);
-        
+
         String rowOutFlow    = ((WebElement)obj[2]).getText();
         String outFlow       = rowOutFlow.split(" ")[2];
         if (outFlow.contains("全開")) {
