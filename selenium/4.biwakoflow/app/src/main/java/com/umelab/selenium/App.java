@@ -14,12 +14,12 @@ public class App {
         BiwaFlowLevelModel model = new BiwaFlowLevelModel();
         crowler.setModel(model);
         crowler.getConnection();
-            // try {
-            //     DbInserter db = new DbInserter(model);
-            //     db.initConnection();
-            //     db.insertData(siteID[i]);
-            // } catch (Exception e) {
-            //     e.printStackTrace();
-            // }
+        try {
+            BiwaFlowLevelDbInserter db = new BiwaFlowLevelDbInserter(model);
+            db.initConnection();
+            db.insertData();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
