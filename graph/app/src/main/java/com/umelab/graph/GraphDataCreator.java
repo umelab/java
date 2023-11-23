@@ -2,7 +2,6 @@ package com.umelab.graph;
 
 import java.util.Calendar;
 import java.util.Stack;
-import java.util.Iterator;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -20,6 +19,18 @@ import java.sql.SQLException;
 public class GraphDataCreator {
 
     private Connection conn = null;
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/biwako1";
+    private static final String DB_USER = "root";
+    private static final String DB_PASS = "umeda389@";
+
+    private static final String SITE_NAME_ADOGAWA = "adogawa";              //安曇川
+    private static final String SITE_NAME_BIWAKO_OHASHI = "biwako-ohashi";  //琵琶湖大橋
+    private static final String SITE_NAME_OGOTO = "ogoto";                  //雄琴
+    private static final String SITE_NAME_MIHOGASAKI = "mihogasaki";        //三保崎
+    private static final String SITE_NAME_KARAHASHI = "karahashi";          //唐橋
+    private static final String SITE_NAME_SETAGAWA = "setagawa";            //瀬田川
+
+    private String basePath = "/home/umeda/bassyan_public/biwako-data/";
 
     /**
      * コンストラクタ
@@ -37,9 +48,9 @@ public class GraphDataCreator {
      */
     private void initConnection() throws SQLException {
         conn = DriverManager.getConnection(
-		    "jdbc:mysql://localhost:3306/biwako1",
-		    "root",
-		    "umeda389@"
+		    DB_URL,
+            DB_USER,
+            DB_PASS
 	       );
 	    conn.setAutoCommit(false);
     }
@@ -72,48 +83,43 @@ public class GraphDataCreator {
         String current = "-current.csv";
         String past = "-yesterday.csv";
         String place = "";
-        String filePathCurrentData = "/home/umeda/bassyan_public/biwako-data/";//adogawa-current.csv";
-        String filePathPastData    = "/home/umeda/bassyan_public/biwako-data/";//adogawa-yesterday.csv";
+        String filePathCurrentData = "";
+        String filePathPastData    = "";
 
         switch(siteID) {
             case 1:
-                place = "adogawa";
+                place = SITE_NAME_ADOGAWA;
                 break;
             case 2:
-                place = "biwako-ohashi";
+                place = SITE_NAME_BIWAKO_OHASHI;
                 break;
             case 3:
-                place = "ogoto";
+                place = SITE_NAME_OGOTO;
                 break;
             case 4:
-                place = "mihogasaki";
+                place = SITE_NAME_MIHOGASAKI;
                 break;
             case 5:
-                place = "karahashi";
+                place = SITE_NAME_KARAHASHI;
                 break;
             case 6:
-                place = "setagawa";
+                place = SITE_NAME_SETAGAWA;
                 break;
         }
 
-        filePathCurrentData += place + current;
-        filePathPastData += place + past;
-        System.out.println("------ filepath -------");
-        System.out.println(filePathCurrentData);
-        System.out.println("-----------------------");
-
+        //当日のデータファイルパス
+        filePathCurrentData = basePath + place + current;
+        //昨日のデータファイルパス
+        filePathPastData = basePath + place + past;
+        //グラフのヘッダー
         String header = createGraphHeader();
 
         //current graph data
         String currentData = extractTemperatureData(0, siteID);
-        System.out.println("------------------");
-        System.out.println(currentData);
         createFile(filePathCurrentData, header, currentData);
 
         //past graph data
         String pastData = extractTemperatureData(1, siteID);
-        System.out.println("------------------");
-        System.out.println(pastData);
         createFile(filePathPastData, header, pastData);
     }
 
