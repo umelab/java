@@ -96,7 +96,7 @@ public class BiwaFlowLevelCrowler {
         System.out.println("水位: " + waterLevel);
         System.out.println("放流量: " + outFlow);
         System.out.println("降水量: " + rainFall);
-        model.setWaterLevel(waterLevel);
+        model.setLevel(waterLevel);
         model.setOutFlow(outFlow);
         model.setRainFall(rainFall);
 
