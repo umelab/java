@@ -79,12 +79,17 @@ public class BiwaFlowLevelCrowler {
         waterLevel = waterLevel.substring(0, waterLevel.length() - 2);
         // 全角を半角に変換
         waterLevel = ToHankaku(waterLevel);
+        
         String rowOutFlow    = ((WebElement)obj[2]).getText();
         String outFlow       = rowOutFlow.split(" ")[2];
-        // 単位を削除
-        outFlow = outFlow.substring(0, outFlow.length() - 4);
-        // 全角を半角に変換
-        outFlow = ToHankaku(outFlow);
+        if (outFlow.contains("全開")) {
+            outFlow = "400";
+        } else {
+            // 単位を削除
+            outFlow = outFlow.substring(0, outFlow.length() - 4);
+            // 全角を半角に変換
+            outFlow = ToHankaku(outFlow);
+        }
 
         String rowRainFall   = ((WebElement)obj[3]).getText();
         String rainFall      = rowRainFall.split(" ")[2];
