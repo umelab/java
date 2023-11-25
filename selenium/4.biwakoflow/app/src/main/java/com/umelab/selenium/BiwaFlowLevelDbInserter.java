@@ -55,8 +55,8 @@ public class BiwaFlowLevelDbInserter {
 			ps.setInt(2, month);
 			ps.setInt(3, day);
 			ps.setInt(4, hour);
-			ps.setString(5, model.getOutFlow());
-			ps.setString(6, model.getLevel());
+			ps.setString(5, model.getLevel());
+			ps.setString(6, model.getOutFlow());
 			ps.setString(7, model.getRainFall());
 		
 			ps.executeUpdate();

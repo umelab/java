@@ -113,6 +113,7 @@ public class BiwaFlowLevelCrowler {
         model.setOutFlow(outFlow);
         model.setRainFall(rainFall);
 
+        // driverオブジェクト破棄
         driver.quit();
     }
 }
