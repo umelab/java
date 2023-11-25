@@ -48,7 +48,7 @@ public class BiwaFlowLevelCrowler {
         options.addArguments("--disable-gpu");
         driver = new ChromeDriver(options);
     }
-ß
+    
     /**
      * 全角を半角に変換
      * @param text
