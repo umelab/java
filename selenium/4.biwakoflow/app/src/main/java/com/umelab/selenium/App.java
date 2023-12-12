@@ -15,9 +15,9 @@ public class App {
         crowler.setModel(model);
         crowler.getConnection();
         try {
-            BiwaFlowLevelDbInserter db = new BiwaFlowLevelDbInserter(model);
-            db.initConnection();
-            db.insertData();
+//            BiwaFlowLevelDbInserter db = new BiwaFlowLevelDbInserter(model);
+//            db.initConnection();
+//            db.insertData();
         } catch (Exception e) {
             e.printStackTrace();
         }

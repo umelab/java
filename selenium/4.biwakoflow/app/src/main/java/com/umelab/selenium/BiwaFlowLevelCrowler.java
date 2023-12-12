@@ -65,7 +65,6 @@ public class BiwaFlowLevelCrowler {
         driver.get(url);
 
         String source = driver.getPageSource();
-        System.out.println("source: " + source);
         
         String title = driver.getTitle();
         System.out.println("Web from: " + title);  
@@ -73,33 +72,35 @@ public class BiwaFlowLevelCrowler {
         driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
 
         // 観測値
-        List<WebElement> list = driver.findElements(By.className("pdf"));
-        Iterator iterator = list.iterator();
-        while(iterator.hasNext()) {
-            WebElement element = (WebElement)iterator.next();
-        }
+        List<WebElement> list = driver.findElements(By.className("mt30"));
 
         // 観測値
         Object obj[] = list.toArray();
         String rowWaterLevel = ((WebElement)obj[1]).getText();
         String waterLevel    = rowWaterLevel.split(" ")[2];
+        String dataArray[] = rowWaterLevel.split(" ");
+        //String waterLevel  = dataArray[2].split(" ")[2];
         // 単位を削除
         waterLevel = waterLevel.substring(0, waterLevel.length() - 2);
         // 全角を半角に変換
         waterLevel = ToHankaku(waterLevel);
+        waterLevel = waterLevel.substring(0, waterLevel.length() -2);
+        System.out.println("waterLevel: " + waterLevel); 
 
-        String rowOutFlow    = ((WebElement)obj[2]).getText();
+        String rowOutFlow    = dataArray[3];
         String outFlow       = rowOutFlow.split(" ")[2];
+        System.out.println("outFlow: " + outFlow);
         if (outFlow.contains("全開")) {
             outFlow = "400";
         } else {
             // 単位を削除
-            outFlow = outFlow.substring(0, outFlow.length() - 4);
+            //outFlow = outFlow.substring(0, outFlow.length() - 4);
             // 全角を半角に変換
             outFlow = ToHankaku(outFlow);
+            outFlow = outFlow.substring(0, outFlow.length() - 5);
         }
 
-        String rowRainFall   = ((WebElement)obj[3]).getText();
+        String rowRainFall   = dataArray[4];
         String rainFall      = rowRainFall.split(" ")[2];
         // 単位を削除
         rainFall = rainFall.substring(0, rainFall.length() - 2);
