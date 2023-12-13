@@ -73,7 +73,7 @@ public class BiwaWeatherCrowler {
 
             driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
 
-            int index = 55;
+            int index = 56;
             // 気温取得
             List<WebElement> tempList = driver.findElements(By.className("td-temp"));
             Object tempObj[] = tempList.toArray();
