@@ -62,86 +62,56 @@ public class BiwaWeatherCrowler {
      * htmlからデータを取得
      */
     public void getConnection() {
-        driver.get(url);
+        try{
+            driver.get(url);
 
-        String source = driver.getPageSource();
-        //System.out.println("source: " + source);
-        
-        String title = driver.getTitle();
-        System.out.println("Web from: " + title);  
+            String source = driver.getPageSource();
+            //System.out.println("source: " + source);
+            
+            String title = driver.getTitle();
+            System.out.println("Web from: " + title);  
 
-        driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+            driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
 
-        int index = 56;
-        // 観測値
-        List<WebElement> tempList = driver.findElements(By.className("td-temp"));
-        Iterator tempIterator = tempList.iterator();
-        while(tempIterator.hasNext()) {
-            WebElement element = (WebElement)tempIterator.next();
+            int index = 55;
+            // 気温取得
+            List<WebElement> tempList = driver.findElements(By.className("td-temp"));
+            Object tempObj[] = tempList.toArray();
+            String temperature = ((WebElement)tempObj[index]).getText();
+            System.out.println("temperature: " + temperature);
+            model.setTemperature(temperature);
+
+            // 降水量取得
+            List<WebElement> rainList = driver.findElements(By.className("td-precipitation1h"));
+            Object rainObj[] = rainList.toArray();
+            String rainfall = ((WebElement)rainObj[index]).getText();
+            System.out.println("rainfall: " + rainfall);
+            model.setRainFall(rainfall);
+
+            // 風向き取得
+            List<WebElement> windDList = driver.findElements(By.className("td-windDirection"));
+            Object windDObj[] = windDList.toArray();
+            String windDirection = ((WebElement)windDObj[index]).getText();
+            System.out.println("wind direction: " + windDirection);
+            model.setWindDirection(windDirection);
+
+            // 風速取得
+            List<WebElement> windSList = driver.findElements(By.className("td-wind"));
+            Object windSObj[] = windSList.toArray();
+            String windSpeed = ((WebElement)windSObj[index]).getText();
+            System.out.println("wind speed: " + windSpeed);
+            model.setWindSpeed(windSpeed);
+
+            // 湿度取得
+            List<WebElement> humList = driver.findElements(By.className("td-humidity"));
+            Object humObj[] = humList.toArray();
+            String humidity = ((WebElement)humObj[index]).getText();
+            System.out.println("humidity: " + humidity);
+            model.setHumidity(humidity);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            driver.quit();
         }
-
-        Object tempObj[] = tempList.toArray();
-        String temperature = ((WebElement)tempObj[index]).getText();
-        System.out.println("temperature: " + temperature);
-        model.setTemperature(temperature);
-        List<WebElement> rainList = driver.findElements(By.className("td-precipitation1h"));
-        Iterator rainIterator = rainList.iterator();
-        while(rainIterator.hasNext()) {
-            WebElement element = (WebElement)rainIterator.next();
-        }
-        Object rainObj[] = rainList.toArray();
-        String rainfall = ((WebElement)rainObj[index]).getText();
-        System.out.println("rainfall: " + rainfall);
-        model.setRainFall(rainfall);
-
-        List<WebElement> windDList = driver.findElements(By.className("td-windDirection"));
-        Iterator windDIterator = windDList.iterator();
-        while(windDIterator.hasNext()) {
-            WebElement element = (WebElement)windDIterator.next();
-        }
-        Object windDObj[] = windDList.toArray();
-        String windDirection = ((WebElement)windDObj[index]).getText();
-        System.out.println("wind direction: " + windDirection);
-        model.setWindDirection(windDirection);
-
-        List<WebElement> windSList = driver.findElements(By.className("td-wind"));
-        Iterator windSIterator = windDList.iterator();
-        while(windSIterator.hasNext()) {
-            WebElement element = (WebElement)windSIterator.next();
-        }
-        Object windSObj[] = windSList.toArray();
-        String windSpeed = ((WebElement)windSObj[index]).getText();
-        System.out.println("wind speed: " + windSpeed);
-        model.setWindSpeed(windSpeed);
-
-        List<WebElement> humList = driver.findElements(By.className("td-humidity"));
-        Iterator humIterator = windDList.iterator();
-        while(humIterator.hasNext()) {
-            WebElement element = (WebElement)humIterator.next();
-        }
-        Object humObj[] = humList.toArray();
-        String humidity = ((WebElement)humObj[index]).getText();
-        System.out.println("humidity: " + humidity);
-        model.setHumidity(humidity);
-
-        // // 観測値
-        // Object obj[] = list.toArray();
-        // String rowWaterLevel = ((WebElement)obj[1]).getText();
-        // String waterLevel    = rowWaterLevel.split(" ")[2];
-        // // 単位を削除
-        // waterLevel = waterLevel.substring(0, waterLevel.length() - 2);
-        // // 全角を半角に変換
-        // waterLevel = ToHankaku(waterLevel);
-
-
-        // System.out.println("水位: " + waterLevel);
-        // System.out.println("放流量: " + outFlow);
-        // System.out.println("降水量: " + rainFall);
-        // model.setLevel(waterLevel);
-        // model.setOutFlow(outFlow);
-        // model.setRainFall(rainFall);
-
-        // driverオブジェクト破棄
-        driver.quit();
     }
 }

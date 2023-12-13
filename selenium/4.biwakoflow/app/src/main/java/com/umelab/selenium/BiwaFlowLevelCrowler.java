@@ -62,59 +62,62 @@ public class BiwaFlowLevelCrowler {
      * htmlからデータを取得
      */
     public void getConnection() {
-        driver.get(url);
+        try{
+            driver.get(url);
 
-        String source = driver.getPageSource();
-        
-        String title = driver.getTitle();
-        System.out.println("Web from: " + title);  
+            String source = driver.getPageSource();
+            
+            String title = driver.getTitle();
+            System.out.println("Web from: " + title);  
 
-        driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+            driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
 
-        // 観測値
-        List<WebElement> list = driver.findElements(By.className("mt30"));
+            // 観測値
+            List<WebElement> list = driver.findElements(By.className("mt30"));
 
-        // 観測値
-        Object obj[] = list.toArray();
-        String rowWaterLevel = ((WebElement)obj[1]).getText();
-        String waterLevel    = rowWaterLevel.split(" ")[2];
-        String dataArray[] = rowWaterLevel.split(" ");
-        //String waterLevel  = dataArray[2].split(" ")[2];
-        // 単位を削除
-        waterLevel = waterLevel.substring(0, waterLevel.length() - 2);
-        // 全角を半角に変換
-        waterLevel = ToHankaku(waterLevel);
-        waterLevel = waterLevel.substring(0, waterLevel.length() -2);
-        System.out.println("waterLevel: " + waterLevel); 
-
-        String rowOutFlow    = dataArray[3];
-        String outFlow       = rowOutFlow.split(" ")[2];
-        System.out.println("outFlow: " + outFlow);
-        if (outFlow.contains("全開")) {
-            outFlow = "400";
-        } else {
+            // 観測値
+            Object obj[] = list.toArray();
+            String rowWaterLevel = ((WebElement)obj[1]).getText();
+            String waterLevel    = rowWaterLevel.split(" ")[2];
+            String dataArray[] = rowWaterLevel.split(" ");
+            //String waterLevel  = dataArray[2].split(" ")[2];
             // 単位を削除
-            //outFlow = outFlow.substring(0, outFlow.length() - 4);
+            waterLevel = waterLevel.substring(0, waterLevel.length() - 2);
             // 全角を半角に変換
-            outFlow = ToHankaku(outFlow);
-            outFlow = outFlow.substring(0, outFlow.length() - 5);
+            waterLevel = ToHankaku(waterLevel);
+            waterLevel = waterLevel.substring(0, waterLevel.length() -2);
+            System.out.println("waterLevel: " + waterLevel); 
+
+            String rowOutFlow    = dataArray[3];
+            String outFlow       = rowOutFlow.split(" ")[2];
+            System.out.println("outFlow: " + outFlow);
+            if (outFlow.contains("全開")) {
+                outFlow = "400";
+            } else {
+                // 単位を削除
+                //outFlow = outFlow.substring(0, outFlow.length() - 4);
+                // 全角を半角に変換
+                outFlow = ToHankaku(outFlow);
+                outFlow = outFlow.substring(0, outFlow.length() - 5);
+            }
+
+            String rowRainFall   = dataArray[4];
+            String rainFall      = rowRainFall.split(" ")[2];
+            // 単位を削除
+            rainFall = rainFall.substring(0, rainFall.length() - 2);
+            // 全角を半角に変換
+            rainFall = ToHankaku(rainFall);
+
+            System.out.println("水位: " + waterLevel);
+            System.out.println("放流量: " + outFlow);
+            System.out.println("降水量: " + rainFall);
+            model.setLevel(waterLevel);
+            model.setOutFlow(outFlow);
+            model.setRainFall(rainFall);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            driver.quit();
         }
-
-        String rowRainFall   = dataArray[4];
-        String rainFall      = rowRainFall.split(" ")[2];
-        // 単位を削除
-        rainFall = rainFall.substring(0, rainFall.length() - 2);
-        // 全角を半角に変換
-        rainFall = ToHankaku(rainFall);
-
-        System.out.println("水位: " + waterLevel);
-        System.out.println("放流量: " + outFlow);
-        System.out.println("降水量: " + rainFall);
-        model.setLevel(waterLevel);
-        model.setOutFlow(outFlow);
-        model.setRainFall(rainFall);
-
-        // driverオブジェクト破棄
-        driver.quit();
     }
 }
