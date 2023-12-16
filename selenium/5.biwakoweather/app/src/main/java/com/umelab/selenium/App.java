@@ -1,11 +1,5 @@
 package com.umelab.selenium;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 public class App {
 
     public static void main(String args[]) {
@@ -20,16 +14,19 @@ public class App {
                         "https://www.jma.go.jp/bosai/amedas/#amdno=60116&area_type=offices&area_code=250000&format=table1h&elems=53410",
                         "https://www.jma.go.jp/bosai/amedas/#amdno=60216&area_type=offices&area_code=250000&format=table1h&elems=53610"
                         };
-        int siteID[] = {1, 2, 3, 4, 5, 6};
+        int siteID = 0;
+        // ページの解析開始位置
+        int parseIndex = 56;
         for (int i = 0; i < url.length; i++) {
-            BiwaWeatherCrowler crowler = new BiwaWeatherCrowler(url[i]);
+            BiwaWeatherCrowler crowler = new BiwaWeatherCrowler(url[i], parseIndex);
             BiwaWeatherModel model = new BiwaWeatherModel();
             crowler.setModel(model);
-            crowler.getConnection();
+            crowler.scrapeWeatherData();
             try {
+                siteID = i + 1;
                 BiwaWeatherDbInserter db = new BiwaWeatherDbInserter(model);
                 db.initConnection();
-                db.insertData(siteID[i]);
+                db.insertData(siteID);
             } catch (Exception e) {
                 e.printStackTrace();
             }

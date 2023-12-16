@@ -5,7 +5,6 @@ package com.umelab.selenium;
 
 import java.util.concurrent.TimeUnit;
 import java.util.List;
-import java.util.Iterator;
 
 import org.openqa.selenium.By;
 
@@ -13,20 +12,22 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-
 import com.ibm.icu.text.Transliterator;
 
 public class BiwaWeatherCrowler {
     private String url;
     private WebDriver driver;
     private BiwaWeatherModel model;
-
+    private int temperatureIndex;
+    
     /**
      * コンストラクタ
      * @param url
+     * @param temperatureIndex
      */
-    public BiwaWeatherCrowler(String url) {
+    public BiwaWeatherCrowler(String url, int temperatureIndex) {
         this.url = url;
+        this.temperatureIndex = temperatureIndex;
         init();
     }
 
@@ -61,57 +62,46 @@ public class BiwaWeatherCrowler {
     /**
      * htmlからデータを取得
      */
-    public void getConnection() {
+    public void scrapeWeatherData() {
         try{
             driver.get(url);
-
-            String source = driver.getPageSource();
-            //System.out.println("source: " + source);
-            
-            String title = driver.getTitle();
-            System.out.println("Web from: " + title);  
-
             driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
 
-            int index = 56;
             // 気温取得
-            List<WebElement> tempList = driver.findElements(By.className("td-temp"));
-            Object tempObj[] = tempList.toArray();
-            String temperature = ((WebElement)tempObj[index]).getText();
-            System.out.println("temperature: " + temperature);
+            String temperature = getWeatherData("td-temp", temperatureIndex);
             model.setTemperature(temperature);
+            System.out.println("temperature: " + temperature);
 
             // 降水量取得
-            List<WebElement> rainList = driver.findElements(By.className("td-precipitation1h"));
-            Object rainObj[] = rainList.toArray();
-            String rainfall = ((WebElement)rainObj[index]).getText();
-            System.out.println("rainfall: " + rainfall);
+            String rainfall = getWeatherData("td-precipitation1h", temperatureIndex);
             model.setRainFall(rainfall);
+            System.out.println("rainfall: " + rainfall);
 
             // 風向き取得
-            List<WebElement> windDList = driver.findElements(By.className("td-windDirection"));
-            Object windDObj[] = windDList.toArray();
-            String windDirection = ((WebElement)windDObj[index]).getText();
-            System.out.println("wind direction: " + windDirection);
+            String windDirection = getWeatherData("td-windDirection", temperatureIndex);
             model.setWindDirection(windDirection);
+            System.out.println("wind direction: " + windDirection);
 
             // 風速取得
-            List<WebElement> windSList = driver.findElements(By.className("td-wind"));
-            Object windSObj[] = windSList.toArray();
-            String windSpeed = ((WebElement)windSObj[index]).getText();
-            System.out.println("wind speed: " + windSpeed);
+            String windSpeed = getWeatherData("td-wind", temperatureIndex);
             model.setWindSpeed(windSpeed);
+            System.out.println("wind speed: " + windSpeed);
 
             // 湿度取得
-            List<WebElement> humList = driver.findElements(By.className("td-humidity"));
-            Object humObj[] = humList.toArray();
-            String humidity = ((WebElement)humObj[index]).getText();
-            System.out.println("humidity: " + humidity);
+            String humidity = getWeatherData("td-humidity", temperatureIndex);
             model.setHumidity(humidity);
+            System.out.println("humidity: " + humidity);
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             driver.quit();
         }
+    }
+
+    // getWeatherDataメソッドの追加: 汎用的なデータ取得メソッド
+    private String getWeatherData(String className, int index) {
+        List<WebElement> elements = driver.findElements(By.className(className));
+        return elements.size() > index ? elements.get(index).getText() : "";
     }
 }
