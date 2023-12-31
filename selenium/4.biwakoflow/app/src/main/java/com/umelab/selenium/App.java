@@ -12,9 +12,9 @@ public class App {
         String url = "https://www.kkr.mlit.go.jp/biwako/index.php";
         BiwaFlowLevelCrowler crowler = new BiwaFlowLevelCrowler(url);
         BiwaFlowLevelModel model = new BiwaFlowLevelModel();
-        crowler.setModel(model);
-        crowler.getConnection();
         try {
+            crowler.setModel(model);
+            crowler.getConnection();
             BiwaFlowLevelDbInserter db = new BiwaFlowLevelDbInserter(model);
             db.initConnection();
             db.insertData();

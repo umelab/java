@@ -61,7 +61,7 @@ public class BiwaFlowLevelCrowler {
     /**
      * htmlからデータを取得
      */
-    public void getConnection() {
+    public void getConnection() throws Exception{
         try{
             driver.get(url);
 
@@ -116,6 +116,7 @@ public class BiwaFlowLevelCrowler {
             model.setRainFall(rainFall);
         } catch (Exception e) {
             e.printStackTrace();
+            new Exception("coult not parse biwako flow level data.");
         } finally {
             driver.quit();
         }
