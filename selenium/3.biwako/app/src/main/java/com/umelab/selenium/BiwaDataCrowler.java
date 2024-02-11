@@ -13,6 +13,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import java.time.Duration;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
@@ -60,7 +63,7 @@ public class BiwaDataCrowler {
             String title = driver.getTitle();
             logger.info("Web from: " + title);
 
-            driver.manage().timeouts().implicitlyWait(WAIT, TimeUnit.SECONDS);
+            driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
 
             // ページタイトル
             WebElement name = driver.findElement(By.className("tm-pc-detail-frame-info-rvrnm"));
@@ -72,7 +75,7 @@ public class BiwaDataCrowler {
             logger.info("meatured time: " + currentTimeText);
 
             // 観測値ポーリング
-            WebDriverWait wait = new WebDriverWait(driver, WAIT);
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(1L));
             wait.until(ExpectedConditions.presenceOfElementLocated(By.className("tm-pc-detail-info-curt-value")));
 
             // 観測値
