@@ -16,7 +16,11 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 import com.ibm.icu.text.Transliterator;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 public class BiwaFlowLevelCrowler {
+    private static final Logger logger = LogManager.getLogger(BiwaFlowLevelCrowler.class);
     private String url;
     private WebDriver driver;
     private BiwaFlowLevelModel model;
@@ -26,6 +30,7 @@ public class BiwaFlowLevelCrowler {
      * @param url
      */
     public BiwaFlowLevelCrowler(String url) {
+        logger.info("start BiwaFlowLevelCrowler");
         this.url = url;
         init();
     }
@@ -42,11 +47,15 @@ public class BiwaFlowLevelCrowler {
      * init WebDriver
      */
     private void init(){
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--no-sandbox");
-        options.addArguments("--headless");
-        options.addArguments("--disable-gpu");
-        driver = new ChromeDriver(options);
+        try {
+            ChromeOptions options = new ChromeOptions();
+            options.addArguments("--no-sandbox");
+            options.addArguments("--headless");
+            options.addArguments("--disable-gpu");
+            driver = new ChromeDriver(options);
+        } catch (Exception e) {
+            logger.error("Unable to initialize WebDriver", e);
+        }
     }
     
     /**
@@ -108,17 +117,19 @@ public class BiwaFlowLevelCrowler {
             // 全角を半角に変換
             rainFall = ToHankaku(rainFall);
 
-            System.out.println("水位: " + waterLevel);
-            System.out.println("放流量: " + outFlow);
-            System.out.println("降水量: " + rainFall);
+            logger.info("water level: " + waterLevel);
+            logger.info("out flow: " + outFlow);
+            logger.info("rain fall: " + rainFall);
             model.setLevel(waterLevel);
             model.setOutFlow(outFlow);
             model.setRainFall(rainFall);
         } catch (Exception e) {
+            logger.error("Unable to parse data from web site", e);
             e.printStackTrace();
             throw new Exception("coult not parse biwako flow level data.");
         } finally {
             driver.quit();
+            driver = null;
         }
     }
 }

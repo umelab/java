@@ -23,6 +23,7 @@ public class BiwaDataCrowler {
     private String url;
     private WebDriver driver;
     private BiwaDataModel model;
+    private static final int WAIT = 60;
 
     public BiwaDataCrowler(String name, String url) {
         logger.info("start BiwaDataCrowler: " + name);
@@ -59,7 +60,7 @@ public class BiwaDataCrowler {
             String title = driver.getTitle();
             logger.info("Web from: " + title);
 
-            driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+            driver.manage().timeouts().implicitlyWait(WAIT, TimeUnit.SECONDS);
 
             // ページタイトル
             WebElement name = driver.findElement(By.className("tm-pc-detail-frame-info-rvrnm"));
@@ -69,6 +70,10 @@ public class BiwaDataCrowler {
             WebElement currentTime = driver.findElement(By.cssSelector(".tm-pc-detail-info-latest-value.pb-1"));
             String currentTimeText = currentTime.getText().replace("■最新観測値", "");
             logger.info("meatured time: " + currentTimeText);
+
+            // 観測値ポーリング
+            WebDriverWait wait = new WebDriverWait(driver, WAIT);
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.className("tm-pc-detail-info-curt-value")));
 
             // 観測値
             List<WebElement> list = driver.findElements(By.className("tm-pc-detail-info-curt-value"));
