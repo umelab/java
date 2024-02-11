@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class App {
-
     public static void main(String args[]) {
         String[] url = {"https://www.river.go.jp/kawabou/pcfull/tm?itmkndCd=6&ofcCd=22039&obsCd=6&isCurrent=true&fld=0",
                         "https://www.river.go.jp/kawabou/pcfull/tm?itmkndCd=6&ofcCd=22039&obsCd=3&isCurrent=true&fld=0",
@@ -17,8 +16,9 @@ public class App {
                         "https://www.river.go.jp/kawabou/pcfull/tm?itmkndCd=6&ofcCd=22039&obsCd=9&isCurrent=true&fld=0"
                         };
         int siteID[] = {1, 2, 3, 4, 5, 6};
+        String name[] = {"安曇川", "琵琶湖大橋", "雄琴", "三保ヶ崎", "唐橋", "瀬田川"};
         for (int i = 0; i < url.length; i++) {
-            BiwaDataCrowler crowler = new BiwaDataCrowler(url[i]);
+            BiwaDataCrowler crowler = new BiwaDataCrowler(name[i], url[i]);
             BiwaDataModel model = new BiwaDataModel();
             crowler.setModel(model);
             crowler.getConnection();
@@ -31,16 +31,4 @@ public class App {
             }
         }
     }
-    //     BiwaDataCrowler crowler = new BiwaDataCrowler("https://www.river.go.jp/kawabou/pcfull/tm?itmkndCd=6&ofcCd=22039&obsCd=6&isCurrent=true&fld=0");
-    //     BiwaDataModel model = new BiwaDataModel();
-    //     crowler.setModel(model);
-    //     crowler.getConnection();
-	// try {
-	//     DbInserter db = new DbInserter(model);
-	//     db.initConnection();
-	//     db.insertData();
-	// } catch (Exception e) {
-	//    e.printStackTrace();
-    //     }
-    // }
 }
