@@ -10,6 +10,7 @@
     <RollingFile name="RollingFile" fileName="logs/biwako_temperature.log"
                  filePattern="logs/$${date:yyyy-MM}/biwako_temperature-%d{MM-dd-yyyy}-%i.log.gz">
       <PatternLayout>
+        <charset>UTF-8</charset>
         <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
       </PatternLayout>
       <Policies>
