@@ -9,10 +9,12 @@ import java.util.Iterator;
 
 import org.openqa.selenium.By;
 
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.time.Duration;
@@ -41,12 +43,14 @@ public class BiwaDataCrowler {
      */
     private void loadDriver(){
         try {
-            //System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
+            System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
             ChromeOptions options = new ChromeOptions();
             options.addArguments("--no-sandbox");
             options.addArguments("--headless");
             options.addArguments("--disable-gpu");
             driver = new ChromeDriver(options);    
+            Capabilities capabilities = ((RemoteWebDriver)driver).getCapabilities();
+	    logger.info("chrome ver: " + capabilities.getBrowserVersion());   
         } catch (Exception e) {
             logger.error("Unable to initialize WebDriver", e);
         }
@@ -94,22 +98,31 @@ public class BiwaDataCrowler {
     }
 
     private void findMeasuredValues() {
-        String cssSelecString = ".tm-pc-detail-info-curt-value";
+        String cssSelecString = "tm-pc-detail-info-curt-value";
         // 観測値ポーリング
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10L));
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className(cssSelecString)));
-
-        logger.info("element: " + element.getText());
+/**
+        WebDriverWait wait;
+        WebElement element;
+        try{
+          wait = new WebDriverWait(driver, Duration.ofSeconds(1L));
+          element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className(cssSelecString)));
+          logger.info("element: " + element.getText());
+        } catch (Exception e) {
+           logger.error("timeout exeception error", e);
+           logger.info("try to reload");
+           driver.navigate().refresh();
+        }
+**/
         // 観測値
         List<WebElement> list = driver.findElements(By.className(cssSelecString));
 
         // 観測値
         Object obj[] = list.toArray();
         logger.info("temp: " + ((WebElement)obj[0]).getText());
-        logger.info("pH: " + ((WebElement)obj[1]).getText());
-        logger.info("DO: " + ((WebElement)obj[2]).getText());
-        logger.info("Conductivity: " + ((WebElement)obj[3]).getText());
-        logger.info("Turbidity: " + ((WebElement)obj[4]).getText());
+//        logger.info("pH: " + ((WebElement)obj[1]).getText());
+//        logger.info("DO: " + ((WebElement)obj[2]).getText());
+//        logger.info("Conductivity: " + ((WebElement)obj[3]).getText());
+//        logger.info("Turbidity: " + ((WebElement)obj[4]).getText());
 
         model.setTemp(((WebElement)obj[0]).getText());
         model.setPH(((WebElement)obj[1]).getText());

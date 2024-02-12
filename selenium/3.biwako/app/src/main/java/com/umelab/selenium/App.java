@@ -17,15 +17,24 @@ public class App {
                         };
         int siteID[] = {1, 2, 3, 4, 5, 6};
         String name[] = {"安曇川", "琵琶湖大橋", "雄琴", "三保ヶ崎", "唐橋", "瀬田川"};
+        boolean insertDb = true;
+        int argsLen = args.length;
+        if (argsLen != 0 && args[0] != null){
+       	  insertDb = false;
+        }
+        System.out.println("db flag: " + insertDb);
+
         for (int i = 0; i < url.length; i++) {
             BiwaDataCrowler crowler = new BiwaDataCrowler(name[i], url[i]);
             BiwaDataModel model = new BiwaDataModel();
             crowler.setModel(model);
             crowler.fetchDataFromUrl();
             try {
-                DbInserter db = new DbInserter(model);
-                db.initConnection();
-                db.insertData(siteID[i]);
+                if (insertDb) {
+                  DbInserter db = new DbInserter(model);
+                  db.initConnection();
+                  db.insertData(siteID[i]);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
