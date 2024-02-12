@@ -22,16 +22,14 @@ import org.apache.logging.log4j.LogManager;
 
 public class BiwaDataCrowler {
     private static final Logger logger = LogManager.getLogger(BiwaDataCrowler.class);
-    //private static String url = "https://www.river.go.jp/kawabou/pcfull/tm?itmkndCd=6&ofcCd=22039&obsCd=6&isCurrent=true&fld=0";
     private String url;
     private WebDriver driver;
     private BiwaDataModel model;
-    private static final int WAIT = 60;
 
     public BiwaDataCrowler(String name, String url) {
         logger.info("start BiwaDataCrowler: " + name);
         this.url = url;
-        init();
+        loadDriver();
     }
 
     public void setModel(BiwaDataModel model) {
@@ -41,7 +39,7 @@ public class BiwaDataCrowler {
     /**
      * init WebDriver
      */
-    private void init(){
+    private void loadDriver(){
         try {
             //System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
             ChromeOptions options = new ChromeOptions();
@@ -54,54 +52,69 @@ public class BiwaDataCrowler {
         }
     }
 
-    public void getConnection() {
+    public void fetchDataFromUrl() {
         try {
-            driver.get(url);
-
-            String source = driver.getPageSource();
-            
-            String title = driver.getTitle();
-            logger.info("Web from: " + title);
-
-            driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
-
-            // ページタイトル
-            WebElement name = driver.findElement(By.className("tm-pc-detail-frame-info-rvrnm"));
-            logger.info("content: " + name.getText());
-
-            // 観測時間
-            WebElement currentTime = driver.findElement(By.cssSelector(".tm-pc-detail-info-latest-value.pb-1"));
-            String currentTimeText = currentTime.getText().replace("■最新観測値", "");
-            logger.info("meatured time: " + currentTimeText);
-
-            // 観測値ポーリング
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10L));
-            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("tm-pc-detail-info-curt-value")));
-	    //WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(By.className("tm-pc-detail-info-curt-value")));
-
-            logger.info("element: " + element.getText());
-	    // 観測値
-            List<WebElement> list = driver.findElements(By.className("tm-pc-detail-info-curt-value"));
-
-            // 観測値
-            Object obj[] = list.toArray();
-            logger.info("temp: " + ((WebElement)obj[0]).getText());
-            logger.info("pH: " + ((WebElement)obj[1]).getText());
-            logger.info("DO: " + ((WebElement)obj[2]).getText());
-            logger.info("Conductivity: " + ((WebElement)obj[3]).getText());
-            logger.info("Turbidity: " + ((WebElement)obj[4]).getText());
-
-            model.setTemp(((WebElement)obj[0]).getText());
-            model.setPH(((WebElement)obj[1]).getText());
-            model.setDO(((WebElement)obj[2]).getText());
-            model.setConductivity(((WebElement)obj[3]).getText());
-            model.setTurbidity(((WebElement)obj[4]).getText());
-            model.setCurrentTime(currentTimeText);     
+            loadPage(url);
+            findPageTitle();
+            findMeaturedTime();
+            findMeasuredValues();
         } catch (Exception e) {
             logger.error("Unable to parse web page: " + url, e);
         } finally {
             driver.quit();
             driver = null;
         }
+    }
+
+    /**
+     * ページタイトルを取得
+     * @throws Exception
+     */
+    private void loadPage(String url) throws Exception {
+        driver.get(url);
+        driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+    }
+
+    /**
+     * ページタイトルを取得
+     */
+    private void findPageTitle() {
+        String title = driver.getTitle();
+        logger.info("Web from: " + title);
+    }
+
+    private void findMeaturedTime() {
+        String cssSelecString = ".tm-pc-detail-info-latest-value.pb-1";
+        String trimedLabel = "■最新観測値";
+        // 観測時間
+        WebElement currentTime = driver.findElement(By.cssSelector(cssSelecString));
+        String currentTimeText = currentTime.getText().replace(trimedLabel, "");
+        logger.info("meatured time: " + currentTimeText);
+        model.setCurrentTime(currentTimeText);
+    }
+
+    private void findMeasuredValues() {
+        String cssSelecString = ".tm-pc-detail-info-curt-value";
+        // 観測値ポーリング
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10L));
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className(cssSelecString)));
+
+        logger.info("element: " + element.getText());
+        // 観測値
+        List<WebElement> list = driver.findElements(By.className(cssSelecString));
+
+        // 観測値
+        Object obj[] = list.toArray();
+        logger.info("temp: " + ((WebElement)obj[0]).getText());
+        logger.info("pH: " + ((WebElement)obj[1]).getText());
+        logger.info("DO: " + ((WebElement)obj[2]).getText());
+        logger.info("Conductivity: " + ((WebElement)obj[3]).getText());
+        logger.info("Turbidity: " + ((WebElement)obj[4]).getText());
+
+        model.setTemp(((WebElement)obj[0]).getText());
+        model.setPH(((WebElement)obj[1]).getText());
+        model.setDO(((WebElement)obj[2]).getText());
+        model.setConductivity(((WebElement)obj[3]).getText());
+        model.setTurbidity(((WebElement)obj[4]).getText());
     }
 }

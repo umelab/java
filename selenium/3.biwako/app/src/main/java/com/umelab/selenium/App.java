@@ -21,7 +21,7 @@ public class App {
             BiwaDataCrowler crowler = new BiwaDataCrowler(name[i], url[i]);
             BiwaDataModel model = new BiwaDataModel();
             crowler.setModel(model);
-            crowler.getConnection();
+            crowler.fetchDataFromUrl();
             try {
                 DbInserter db = new DbInserter(model);
                 db.initConnection();
