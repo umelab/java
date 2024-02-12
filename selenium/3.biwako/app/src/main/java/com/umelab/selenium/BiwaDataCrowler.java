@@ -50,7 +50,7 @@ public class BiwaDataCrowler {
             options.addArguments("--disable-gpu");
             driver = new ChromeDriver(options);    
             Capabilities capabilities = ((RemoteWebDriver)driver).getCapabilities();
-	    logger.info("chrome ver: " + capabilities.getBrowserVersion());   
+	        logger.info("chrome ver: " + capabilities.getBrowserVersion());   
         } catch (Exception e) {
             logger.error("Unable to initialize WebDriver", e);
         }
