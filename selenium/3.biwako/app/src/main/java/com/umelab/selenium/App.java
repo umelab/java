@@ -24,7 +24,7 @@ public class App {
         boolean insertDb = true;
         int argsLen = args.length;
         if (argsLen != 0 && args[0] != null){
-            logger.warning("database is not inserted.");
+            logger.warn("database is not inserted.");
        	    insertDb = false;
         }
 
