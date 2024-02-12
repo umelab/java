@@ -75,10 +75,12 @@ public class BiwaDataCrowler {
             logger.info("meatured time: " + currentTimeText);
 
             // 観測値ポーリング
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(1L));
-            wait.until(ExpectedConditions.presenceOfElementLocated(By.className("tm-pc-detail-info-curt-value")));
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10L));
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("tm-pc-detail-info-curt-value")));
+	    //WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(By.className("tm-pc-detail-info-curt-value")));
 
-            // 観測値
+            logger.info("element: " + element.getText());
+	    // 観測値
             List<WebElement> list = driver.findElements(By.className("tm-pc-detail-info-curt-value"));
 
             // 観測値
