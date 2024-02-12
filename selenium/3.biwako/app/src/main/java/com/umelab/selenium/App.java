@@ -10,7 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class App {
-    private static final java.util.logging.Logger logger = LogManager.getLogger(App.class);
+    private static final Logger logger = LogManager.getLogger(App.class);
     public static void main(String args[]) {
         String[] url = {"https://www.river.go.jp/kawabou/pcfull/tm?itmkndCd=6&ofcCd=22039&obsCd=6&isCurrent=true&fld=0",
                         "https://www.river.go.jp/kawabou/pcfull/tm?itmkndCd=6&ofcCd=22039&obsCd=3&isCurrent=true&fld=0",
