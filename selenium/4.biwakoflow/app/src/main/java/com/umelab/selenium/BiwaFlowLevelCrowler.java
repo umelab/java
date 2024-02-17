@@ -77,7 +77,7 @@ public class BiwaFlowLevelCrowler {
             String source = driver.getPageSource();
             
             String title = driver.getTitle();
-            System.out.println("Web from: " + title);  
+            logger.info("Web from: " + title);  
 
             driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
 
@@ -95,11 +95,11 @@ public class BiwaFlowLevelCrowler {
             // 全角を半角に変換
             waterLevel = ToHankaku(waterLevel);
             waterLevel = waterLevel.substring(0, waterLevel.length() -2);
-            System.out.println("waterLevel: " + waterLevel); 
+            logger.info("waterLevel: " + waterLevel); 
 
             String rowOutFlow    = dataArray[3];
             String outFlow       = rowOutFlow.split(" ")[2];
-            System.out.println("outFlow: " + outFlow);
+            logger.info("outFlow: " + outFlow);
             if (outFlow.contains("全開")) {
                 outFlow = "400";
             } else {
