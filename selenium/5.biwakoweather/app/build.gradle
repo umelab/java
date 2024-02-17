@@ -25,6 +25,10 @@ dependencies {
     implementation 'com.google.guava:guava:31.1-jre'
     implementation 'mysql:mysql-connector-java:8.0.23'
     implementation 'com.ibm.icu:icu4j:69.1'
+    // log4j2
+    implementation 'org.apache.logging.log4j:log4j-api:2.22.1'
+    implementation 'org.apache.logging.log4j:log4j-core:2.22.1'
+
 }
 
 application {

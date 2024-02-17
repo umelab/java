@@ -119,10 +119,10 @@ public class BiwaDataCrowler {
         // 観測値
         Object obj[] = list.toArray();
         logger.info("temp: " + ((WebElement)obj[0]).getText());
-//        logger.info("pH: " + ((WebElement)obj[1]).getText());
-//        logger.info("DO: " + ((WebElement)obj[2]).getText());
-//        logger.info("Conductivity: " + ((WebElement)obj[3]).getText());
-//        logger.info("Turbidity: " + ((WebElement)obj[4]).getText());
+        logger.info("pH: " + ((WebElement)obj[1]).getText());
+        logger.info("DO: " + ((WebElement)obj[2]).getText());
+        logger.info("Conductivity: " + ((WebElement)obj[3]).getText());
+        logger.info("Turbidity: " + ((WebElement)obj[4]).getText());
 
         model.setTemp(((WebElement)obj[0]).getText());
         model.setPH(((WebElement)obj[1]).getText());
