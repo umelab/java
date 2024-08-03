@@ -1,0 +1,6 @@
+INSERT INTO SiteMaster VALUES (1, '安曇川', 'https://www.river.go.jp/kawabou/pc/tm?zm=10&clat=35.3102778&clon=136.1547222&fld=0&mapType=0&viewGrpStg=2&viewRd=0&viewRW=0&viewRiver=1&viewPoint=1&ext=0&ofcCd=22039&itmkndCd=6&obsCd=6');
+INSERT INTO SiteMaster VALUES (2, '琵琶湖大橋', '');
+INSERT INTO SiteMaster VALUES (3, '雄琴沖','https://www.river.go.jp/kawabou/pc/tm?zm=10&clat=35.3102778&clon=136.1547222&fld=0&mapType=0&viewGrpStg=2&viewRd=0&viewRW=0&viewRiver=1&viewPoint=1&ext=0&ofcCd=22039&itmkndCd=6&obsCd=2');
+INSERT INTO SiteMaster VALUES (4, '三保ヶ崎','https://www.river.go.jp/kawabou/pc/tm?zm=10&clat=35.13675607652669&clon=135.9379577636719&fld=0&mapType=0&viewGrpStg=2&viewRd=0&viewRW=0&viewRiver=1&viewPoint=1&ext=0&ofcCd=22039&itmkndCd=6&obsCd=7');
+INSERT INTO SiteMaster VALUES (5, '唐橋流心','https://www.river.go.jp/kawabou/pc/tm?zm=10&clat=35.13675607652669&clon=135.9379577636719&fld=0&mapType=0&viewGrpStg=2&viewRd=0&viewRW=0&viewRiver=1&viewPoint=1&ext=0&ofcCd=22039&itmkndCd=6&obsCd=1');
+INSERT INTO SiteMaster VALUES (6, '瀬田','https://www.river.go.jp/kawabou/pc/tm?zm=10&clat=35.13675607652669&clon=135.9379577636719&fld=0&mapType=0&viewGrpStg=2&viewRd=0&viewRW=0&viewRiver=1&viewPoint=1&ext=0&ofcCd=22039&itmkndCd=6&obsCd=9');
